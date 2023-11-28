@@ -1,8 +1,12 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { LoginButton } from "./login-button";
 import { Input } from "../input";
+import supabaseClient from "@/lib/supabaseClient";
+import { SignUpButton } from "./signup-button";
+import { Button } from "../button";
+import Link from "next/link";
 
 export default function SignInForm() {
   const [email, setEmail] = useState("");
@@ -16,7 +20,11 @@ export default function SignInForm() {
         type="password"
         placeholder="Password"
       />
-      <LoginButton fullWidth />
+      <LoginButton fullWidth password={password} email={email} />
+      <hr className="w-full" />
+      <Button fullWidth variant={"outline"}>
+        <Link href="/sign-up">Sign Up</Link>
+      </Button>{" "}
     </div>
   );
 }

@@ -10,11 +10,15 @@ import supabaseClient from "@/lib/supabaseClient";
 interface LoginButtonProps extends ButtonProps {
   text?: string;
   fullWidth?: boolean;
+  password?: string;
+  email?: string;
 }
 
 export function LoginButton({
   text = "Login",
   className,
+  email = "",
+  password = "",
   ...props
 }: LoginButtonProps) {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -25,11 +29,11 @@ export function LoginButton({
         onClick={() => {
           setIsLoading(true);
           supabaseClient.auth.signInWithPassword({
-            email: "email",
-            password: "password",
+            email: email,
+            password: password,
           });
         }}
-        style={props.fullWidth ? {width: '100%'} : {}}
+        style={props.fullWidth ? { width: "100%" } : {}}
         disabled={isLoading}
         className={cn(className)}
         {...props}
