@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { LoginButton } from "./login-button";
 import { Input } from "../input";
-import supabaseClient from "@/lib/supabaseClient";
-import { SignUpButton } from "./signup-button";
 import { Button } from "../button";
 import Link from "next/link";
 

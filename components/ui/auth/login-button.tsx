@@ -31,6 +31,14 @@ export function LoginButton({
           supabaseClient.auth.signInWithPassword({
             email: email,
             password: password,
+          })
+          .then(response => {
+            console.log('Login successful:', response);
+            setIsLoading(false);
+          })
+          .catch(error => {
+            console.error('Login error:', error);
+            setIsLoading(false);
           });
         }}
         style={props.fullWidth ? { width: "100%" } : {}}
