@@ -17,7 +17,7 @@ import { SidebarFooter } from "@/components/sidebar-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ClearHistory } from "@/components/clear-history";
 import { UserMenu } from "@/components/user-menu";
-import { LoginButton } from "@/components/login-button";
+import { LoginButton } from "@/components/ui/auth/login-button";
 
 export async function Header() {
   const session = await auth();
