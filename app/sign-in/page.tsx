@@ -1,29 +1,33 @@
-"use client";
-
+import { GetServerSideProps } from 'next';
 import { auth } from "@/auth";
-import { LoginButton } from "@/components/login-button";
+import { LoginButton } from "@/components/ui/auth/login-button";
 import { Input } from "@/components/ui/input";
-import { redirect } from "next/navigation";
-import { useState } from "react";
+import SignInForm from '@/components/ui/auth/signin-form';
 
-export default async function SignInPage() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await auth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  // redirect to home if user is already logged in
+  // If user is already logged in, redirect to home
   if (session?.user) {
-    redirect("/");
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
   }
+
+  // If not logged in, continue rendering the page
+  return {
+    props: {}, // add your own props as necessary
+  };
+};
+
+export default function SignInPage() {
   return (
-    <div className="flex flex-col h-[calc(100vh-theme(spacing.16))] items-center justify-center space-y-4 py-10 max-w-lg mx-auto">
-      <Input onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-      <Input
-        onChange={(e) => setPassword(e.target.value)}
-        type="password"
-        placeholder="Password"
-      />
-      <LoginButton />
+    <div>
+      <SignInForm />
     </div>
   );
 }
+
