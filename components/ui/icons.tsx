@@ -476,6 +476,25 @@ function IconChevronUpDown({
   )
 }
 
+function IconHome({ className, ...props }: React.ComponentProps<'svg'>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={cn('h-4 w-4', className)}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M20 9v11a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-6H10v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9l8-6l8 6z" />
+      <path d="M3 9L12 2l9 7" />
+    </svg>
+  )
+}
+
 export {
   IconEdit,
   IconNextChat,
@@ -503,5 +522,6 @@ export {
   IconShare,
   IconUsers,
   IconExternalLink,
-  IconChevronUpDown
+  IconChevronUpDown,
+  IconHome,
 }
