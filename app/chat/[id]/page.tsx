@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 // import { auth } from "@/auth";
 import { getChat } from "@/app/actions";
 import { Chat } from "@/components/chat";
+import { createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
 
 export const runtime = "edge";
 export const preferredRegion = "home";
@@ -17,7 +18,9 @@ export interface ChatPageProps {
 export async function generateMetadata({
   params,
 }: ChatPageProps): Promise<Metadata> {
-  const session = await auth();
+
+  const supabaseClient = createSupabaseServerComponentClient();
+  const session = (await supabaseClient.auth.getSession()).data.session
 
   if (!session?.user) {
     return {};
@@ -30,7 +33,9 @@ export async function generateMetadata({
 }
 
 export default async function ChatPage({ params }: ChatPageProps) {
-  const session = await auth();
+  
+  const supabaseClient = createSupabaseServerComponentClient();
+  const session = (await supabaseClient.auth.getSession()).data.session
 
   if (!session?.user) {
     redirect(`/sign-in?next=/chat/${params.id}`);
