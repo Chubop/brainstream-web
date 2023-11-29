@@ -5,11 +5,11 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { IconSpinner } from "@/components/ui/icons";
-import supabaseClient from "@/lib/supabaseClient";
 import { Dialog, DialogTrigger } from "../dialog";
 import CheckEmailDialog from "./check-email-dialog";
+import { createSupabaseFrontendClient } from "@/app/auth/supabase";
 
-interface LoginButtonProps extends ButtonProps {
+interface SignUpButtonProps extends ButtonProps {
   text?: string;
   fullWidth?: boolean;
   password?: string;
@@ -22,9 +22,12 @@ export function SignUpButton({
   email = "",
   password = "",
   ...props
-}: LoginButtonProps) {
+}: SignUpButtonProps) {
+
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  const supabaseClient = createSupabaseFrontendClient();
 
   const handleSignUp = () => {
     setIsLoading(true);
