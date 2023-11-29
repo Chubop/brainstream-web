@@ -4,8 +4,8 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { kv } from '@vercel/kv'
 
-import { auth } from '@/auth'
 import { type Chat } from '@/lib/types'
+import { createSupabaseServerComponentClient } from './auth/supabaseAppRouterClient'
 
 export async function getChats(userId?: string | null) {
   if (!userId) {
@@ -41,7 +41,8 @@ export async function getChat(id: string, userId: string) {
 }
 
 export async function removeChat({ id, path }: { id: string; path: string }) {
-  const session = await auth()
+  const supabaseClient = createSupabaseServerComponentClient();
+  const session = (await supabaseClient.auth.getSession()).data.session
 
   if (!session) {
     return {
@@ -65,7 +66,8 @@ export async function removeChat({ id, path }: { id: string; path: string }) {
 }
 
 export async function clearChats() {
-  const session = await auth()
+  const supabaseClient = createSupabaseServerComponentClient();
+  const session = (await supabaseClient.auth.getSession()).data.session
 
   if (!session?.user?.id) {
     return {
@@ -101,8 +103,9 @@ export async function getSharedChat(id: string) {
 }
 
 export async function shareChat(chat: Chat) {
-  const session = await auth()
-
+  const supabaseClient = createSupabaseServerComponentClient();
+  const session = (await supabaseClient.auth.getSession()).data.session
+  
   if (!session?.user?.id || session.user.id !== chat.userId) {
     return {
       error: 'Unauthorized'

@@ -1,9 +1,11 @@
+'use server';
+
 import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
 
-import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
+import { createSupabaseServerComponentClient } from '@/app/auth/supabaseAppRouterClient'
 
 export const runtime = 'edge'
 
@@ -16,7 +18,10 @@ const openai = new OpenAIApi(configuration)
 export async function POST(req: Request) {
   const json = await req.json()
   const { messages, previewToken } = json
-  const userId = (await auth())?.user.id
+
+  const supabaseClient = createSupabaseServerComponentClient();
+  const session = (await supabaseClient.auth.getSession()).data.session
+  const userId = (await session?.user.id);
 
   if (!userId) {
     return new Response('Unauthorized', {

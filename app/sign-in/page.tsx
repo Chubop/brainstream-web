@@ -1,16 +1,11 @@
-import { auth } from "@/auth";
-import { LoginButton } from "@/components/login-button";
-import { redirect } from "next/navigation";
+// pages/sign-in.tsx
+import { GetServerSideProps } from "next";
+import SignInForm from "@/components/ui/auth/login-form";
 
-export default async function SignInPage() {
-  const session = await auth();
-  // redirect to home if user is already logged in
-  if (session?.user) {
-    redirect("/");
-  }
+export default function SignInPage() {
   return (
-    <div className="flex h-[calc(100vh-theme(spacing.16))] items-center justify-center py-10">
-      <LoginButton />
+    <div>
+      <SignInForm />
     </div>
   );
 }
