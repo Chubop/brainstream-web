@@ -61,7 +61,7 @@ export async function Header() {
           className={cn(buttonVariants({ variant: "outline" }))}
         >
           {/* <IconGitHub /> */}
-          <span className="hidden md:flex">Shave Max's Balls</span>
+          <span className="hidden md:flex">Shave Max Balls</span>
         </a>
         {/* <a
           href="https://github.com/vercel/nextjs-ai-chatbot/"
