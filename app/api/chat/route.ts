@@ -3,7 +3,6 @@ import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { Configuration, OpenAIApi } from 'openai-edge'
 
-import { nanoid } from '@/lib/utils'
 import { createSupabaseServerComponentClient } from '@/app/auth/supabaseAppRouterClient'
 
 export const runtime = 'edge'
@@ -42,7 +41,7 @@ export async function POST(req: Request) {
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
       const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
+      const id = json.id
       const createdAt = Date.now()
       const path = `/chat/${id}`
       const payload = {
