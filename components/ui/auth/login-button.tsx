@@ -5,7 +5,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { IconSpinner } from "@/components/ui/icons";
-import supabaseClient from "@/lib/supabaseClient";
+import { createSupabaseFrontendClient } from "@/app/auth/supabase";
+import { useRouter } from "next/navigation";
 
 interface LoginButtonProps extends ButtonProps {
   text?: string;
@@ -22,24 +23,27 @@ export function LoginButton({
   ...props
 }: LoginButtonProps) {
   const [isLoading, setIsLoading] = React.useState(false);
+  const router = useRouter(); // Initialize useRouter
+
+  const supabaseClient = createSupabaseFrontendClient();
   return (
     <>
       <Button
         variant="outline"
-        onClick={() => {
+        onClick={async () => {
           setIsLoading(true);
-          supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password,
-          })
-          .then(response => {
+          try {
+            const response = await supabaseClient.auth.signInWithPassword({
+              email: email,
+              password: password,
+            });
             console.log('Login successful:', response);
-            setIsLoading(false);
-          })
-          .catch(error => {
+            router.push('/'); // Redirect to home page after successful login
+          } catch (error) {
             console.error('Login error:', error);
+          } finally {
             setIsLoading(false);
-          });
+          }
         }}
         style={props.fullWidth ? { width: "100%" } : {}}
         disabled={isLoading}

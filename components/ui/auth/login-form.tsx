@@ -6,7 +6,7 @@ import { Input } from "../input";
 import { Button } from "../button";
 import Link from "next/link";
 
-export default function SignInForm() {
+export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
