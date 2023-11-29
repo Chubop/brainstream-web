@@ -1,4 +1,3 @@
-'use server';
 
 import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
