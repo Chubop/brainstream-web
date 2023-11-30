@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { getCookie, setCookie } from "cookies-next";
 
 
 export function createSupabaseAppServerClient(serverComponent = false){
