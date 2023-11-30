@@ -41,6 +41,9 @@ dependencies:
   '@supabase/auth-ui-shared':
     specifier: ^0.1.8
     version: 0.1.8(@supabase/supabase-js@2.38.5)
+  '@supabase/ssr':
+    specifier: ^0.0.10
+    version: 0.0.10(@supabase/supabase-js@2.38.5)
   '@supabase/supabase-js':
     specifier: ^2.38.5
     version: 2.38.5
@@ -62,6 +65,9 @@ dependencies:
   clsx:
     specifier: ^1.2.1
     version: 1.2.1
+  cookies-next:
+    specifier: ^4.1.0
+    version: 4.1.0
   focus-trap-react:
     specifier: ^10.1.1
     version: 10.1.1(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -1267,6 +1273,16 @@ packages:
       - supports-color
     dev: false
 
+  /@supabase/ssr@0.0.10(@supabase/supabase-js@2.38.5):
+    resolution: {integrity: sha512-eVs7+bNlff8Fd79x8K3Jbfpmf8P8QRA1Z6rUDN+fi4ReWvRBZyWOFfR6eqlsX6vTjvGgTiEqujFSkv2PYW5kbQ==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.33.1
+    dependencies:
+      '@supabase/supabase-js': 2.38.5
+      cookie: 0.5.0
+      ramda: 0.29.1
+    dev: false
+
   /@supabase/storage-js@2.5.4:
     resolution: {integrity: sha512-yspHD19I9uQUgfTh0J94+/r/g6hnhdQmw6Y7OWqr/EbnL6uvicGV1i1UDkkmeUHqfF9Mbt2sLtuxRycYyKv2ew==}
     dependencies:
@@ -1304,6 +1320,10 @@ packages:
       tailwindcss: 3.3.2
     dev: true
 
+  /@types/cookie@0.4.1:
+    resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
+    dev: false
+
   /@types/debug@4.1.7:
     resolution: {integrity: sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==}
     dependencies:
@@ -1332,6 +1352,10 @@ packages:
 
   /@types/ms@0.7.31:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
+    dev: false
+
+  /@types/node@16.18.66:
+    resolution: {integrity: sha512-sePmD/imfKvC4re/Wwos1NEcXYm6O96CAG5gQVY53nmDb8ePQ4qPku6uruN7n6TJ0t5FhcoUc2+yvE2/UZVDZw==}
     dev: false
 
   /@types/node@17.0.45:
@@ -1928,9 +1952,22 @@ packages:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
+  /cookie@0.4.2:
+    resolution: {integrity: sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
   /cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /cookies-next@4.1.0:
+    resolution: {integrity: sha512-BREVc4TJT4NwXfyKjdjnYFXM6iRns+MYpCd34ClXuYqeisXnkPkbq7Ok9xaqi9mHmV6H2rwPE+p3EpMz4pF/kQ==}
+    dependencies:
+      '@types/cookie': 0.4.1
+      '@types/node': 16.18.66
+      cookie: 0.4.2
     dev: false
 
   /cross-spawn@7.0.3:
@@ -4403,6 +4440,10 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
     dev: true
+
+  /ramda@0.29.1:
+    resolution: {integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==}
+    dev: false
 
   /react-dom@18.2.0(react@18.2.0):
     resolution: {integrity: sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==}
