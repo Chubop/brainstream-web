@@ -22,7 +22,7 @@ export function createSupabaseAppServerClient(serverComponent = false){
                 },
                 // Function to set a cookie.
                 set(name, value, options){
-                    cookies().set(name, value, options);
+                    setCookie(name, value, options);
                 },
                 // Function to remove a cookie by name.
                 remove(name, options){
