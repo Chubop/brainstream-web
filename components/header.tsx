@@ -19,7 +19,7 @@ import { SidebarFooter } from "@/components/sidebar-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ClearHistory } from "@/components/clear-history";
 import { UserMenu } from "@/components/user-menu";
-import { LoginButton } from "@/components/ui/auth/login-button";
+import { LoginButton } from "@/components/auth/login-button";
 import { createSupabaseAppServerClient, createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
 import { createSupabaseFrontendClient } from "@/app/auth/supabase";
 import HeaderButton from "./header-button";

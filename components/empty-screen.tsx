@@ -3,6 +3,7 @@ import { UseChatHelpers } from 'ai/react'
 import { Button } from '@/components/ui/button'
 import { ExternalLink } from '@/components/external-link'
 import { IconArrowRight } from '@/components/ui/icons'
+import { Timeline } from './timeline/timeline'
 
 const exampleMessages = [
   {
@@ -44,6 +45,9 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
               {message.heading}
             </Button>
           ))}
+        </div>
+        <div>
+          <Timeline />
         </div>
       </div>
     </div>

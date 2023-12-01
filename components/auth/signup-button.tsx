@@ -5,7 +5,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { IconSpinner } from "@/components/ui/icons";
-import { Dialog, DialogTrigger } from "../dialog";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 import CheckEmailDialog from "./check-email-dialog";
 import { createSupabaseFrontendClient } from "@/app/auth/supabase";
 

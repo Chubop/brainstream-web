@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { LoginButton } from "./login-button";
-import { Input } from "../input";
-import { Button } from "../button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import Link from "next/link";
 
 export default function LoginForm() {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { SignUpButton } from "./signup-button";
-import { Label } from "../label";
+import { Label } from "../ui/label";
 
 export default function SignUpForm() {
   const [email, setEmail] = useState("");
