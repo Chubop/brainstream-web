@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import * as React from "react";
 import Link from "next/link";
@@ -20,16 +20,19 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { ClearHistory } from "@/components/clear-history";
 import { UserMenu } from "@/components/user-menu";
 import { LoginButton } from "@/components/auth/login-button";
-import { createSupabaseAppServerClient, createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
+import {
+  createSupabaseAppServerClient,
+  createSupabaseServerComponentClient,
+} from "@/app/auth/supabaseAppRouterClient";
 import { createSupabaseFrontendClient } from "@/app/auth/supabase";
 import HeaderButton from "./header-button";
+import HeaderButtonGroup from "./header-buttons";
+import HeaderButtons from "./header-buttons";
 
 export async function Header() {
-
   const supabaseClient = createSupabaseAppServerClient();
-  const session = ((await supabaseClient.auth.getSession())).data.session;
+  const session = (await supabaseClient.auth.getSession()).data.session;
   return (
-
     <header className="sticky top-0 z-50 flex h-16 w-full shrink-0 items-center justify-between border-b bg-gradient-to-b from-background/10 via-background/50 to-background/80 px-4 backdrop-blur-xl">
       <div className="flex items-center">
         {session?.user && (
@@ -54,11 +57,13 @@ export async function Header() {
             </Button>
           )}
           {/* <IconGitHub /> */}
-          <HeaderButton href="/" icon={<IconHome />}>Homepage</HeaderButton>
+          <HeaderButtons />
+          {/* <HeaderButton href="/" icon={<IconHome />}>
+              Homepage
+            </HeaderButton> */}
         </div>
       </div>
       <div className="flex items-center justify-end space-x-2">
-
         {/* <a
           href="https://github.com/vercel/nextjs-ai-chatbot/"
           target="_blank"
