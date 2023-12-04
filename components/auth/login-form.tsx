@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { LoginButton } from "./login-button";
-import { Input } from "../input";
-import { Button } from "../button";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 import Link from "next/link";
+import { Separator } from "../ui/separator";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ export default function LoginForm() {
         placeholder="Password"
       />
       <LoginButton fullWidth password={password} email={email} />
-      <hr className="w-full" />
+      <Separator />
       <Button fullWidth variant={"outline"}>
         <Link href="/sign-up">Sign Up</Link>
       </Button>{" "}

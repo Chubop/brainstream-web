@@ -1,6 +1,6 @@
 import React from 'react'
-import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../dialog'
-import { Button } from '../button'
+import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui/dialog'
+import { Button } from '../ui/button'
 
 interface CheckEmailDialogProps {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
