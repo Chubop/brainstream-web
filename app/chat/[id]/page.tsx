@@ -18,6 +18,7 @@ export interface ChatPageProps {
 export async function generateMetadata({
   params,
 }: ChatPageProps): Promise<Metadata> {
+
   const supabaseClient = createSupabaseServerComponentClient();
   const session = (await supabaseClient.auth.getSession()).data.session
 
@@ -32,9 +33,10 @@ export async function generateMetadata({
 }
 
 export default async function ChatPage({ params }: ChatPageProps) {
+  
   const supabaseClient = createSupabaseServerComponentClient();
   const session = (await supabaseClient.auth.getSession()).data.session
-  
+
   if (!session?.user) {
     redirect(`/sign-in?next=/chat/${params.id}`);
   }
