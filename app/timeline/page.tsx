@@ -7,7 +7,7 @@ import { IconArrowRight } from "@/components/ui/icons";
 
 function TimelinePage({}) {
   return (
-    <div className="mx-auto max-w-2xl px-4 w-full">
+    <div className="mx-auto max-w-2xl px-4 w-full pt-10">
       <div className="rounded-lg border bg-background p-8">
         <h1 className="mb-2 text-lg font-semibold">
           <ExternalLink href="https://brainstream.app">Timeline</ExternalLink>{" "}
