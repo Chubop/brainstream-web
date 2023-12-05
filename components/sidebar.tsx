@@ -14,13 +14,14 @@ import { IconSidebar } from '@/components/ui/icons'
 
 export interface SidebarProps {
   children?: React.ReactNode
+  className?: string
 }
 
-export function Sidebar({ children }: SidebarProps) {
+export function Sidebar({ children, className }: SidebarProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" className="-ml-2 h-9 w-9 p-0">
+        <Button variant="ghost" className="-ml-2 h-9 w-9 p-0 mr-2">
           <IconSidebar className="h-6 w-6" />
           <span className="sr-only">Toggle Sidebar</span>
         </Button>
