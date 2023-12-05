@@ -14,9 +14,12 @@ import {
 import { IconExternalLink } from '@/components/ui/icons'
 import { createSupabaseFrontendClient } from '@/app/auth/supabase'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 export interface UserMenuProps {
-  user: Session['user']
+  user: Session['user'],
+  style?: React.CSSProperties,
+  className?: string
 }
 
 function getUserInitials(name: string) {
@@ -24,13 +27,13 @@ function getUserInitials(name: string) {
   return lastName ? `${firstName[0]}${lastName[0]}` : firstName.slice(0, 2)
 }
 
-export function UserMenu({ user }: UserMenuProps) {
+export function UserMenu({ user, style, className }: UserMenuProps) {
 
   const supabaseClient = createSupabaseFrontendClient();
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-between">
+    <div className={cn("flex items-center justify-between", className)} style={style}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="pl-0">
