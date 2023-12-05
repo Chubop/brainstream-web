@@ -1,18 +1,8 @@
-"use server";
-
-import { kv } from "@vercel/kv";
-import { OpenAIStream, StreamingTextResponse } from "ai";
-import { Configuration, OpenAIApi } from "openai-edge";
-
-import { nanoid } from "@/lib/utils";
 import { createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
+import { RequestInit } from "next/dist/server/web/spec-extension/request";
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const openai = new OpenAIApi(configuration);
 export async function POST(req: Request) {
+  console.log("POST request")
   const json = await req.json();
   const { messages, previewToken } = json;
 
@@ -26,44 +16,41 @@ export async function POST(req: Request) {
     });
   }
 
-  if (previewToken) {
-    configuration.apiKey = previewToken;
-  }
+  // Send a fetch request to your back-end server
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
 
-  const res = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo",
-    messages,
-    temperature: 0.7,
-    stream: true,
+  const raw = JSON.stringify({
+    "user_id": "test_user",
+    "stream_id": "stream test",
+    "content": "What is life? answer in 50 words"
   });
 
-  const stream = OpenAIStream(res, {
-    async onCompletion(completion) {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [
-          ...messages,
-          {
-            content: completion,
-            role: "assistant",
-          },
-        ],
-      };
-      await kv.hmset(`chat:${id}`, payload);
-      await kv.zadd(`user:chat:${userId}`, {
-        score: createdAt,
-        member: `chat:${id}`,
-      });
-    },
-  });
+  const requestOptions: RequestInit = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow' as RequestRedirect
+  };
 
-  return new StreamingTextResponse(stream);
+  console.log('Sending request to https://brainstream-web.uc.r.appspot.com/chat/input with body:', raw);
+  const res = await fetch('https://brainstream-web.uc.r.appspot.com/chat/input', requestOptions);
+
+  // Get the response text
+  const response = await res.json();
+  const responseText = response.content ?? "Something went wrong!";
+
+  // Create a new message with the response text
+  const newMessage = {
+    content: responseText,
+    role: "assistant",
+  };
+
+  // Add the new message to the messages array
+  const updatedMessages = [...messages, newMessage];
+
+  // Return the updated messages array
+  return new Response(JSON.stringify(updatedMessages), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 }
