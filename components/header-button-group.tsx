@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ReactNode } from "react";
 import HeaderButton from "./header-button";
-import { IconCalendar, IconHome } from "./ui/icons";
+import { IconCalendar, IconHome, IconPlus } from "./ui/icons";
 
 function HeaderButtonGroup() {
   const [hover, setHover] = useState(false);
@@ -27,6 +27,10 @@ function HeaderButtonGroup() {
       </HeaderButton>
       <HeaderButton href="/timeline" icon={<IconCalendar />} groupHover={hover}>
         Timeline
+      </HeaderButton>
+
+      <HeaderButton href="/upload" icon={<IconPlus />} groupHover={hover}>
+        Upload
       </HeaderButton>
     </div>
   );
