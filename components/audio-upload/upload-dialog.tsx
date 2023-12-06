@@ -7,22 +7,28 @@ import AudioDropzone from './dropzone';
 import { Input } from '../ui/input';
 import CategorySelect from './category-select';
 import { IconUpload } from '../ui/icons';
+import { useFileUpload } from '@/lib/hooks/use-file-upload';
 
-interface AudioUploadDialogProps {
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+interface AudioUploadDialogProps {}
 
-const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ setIsDialogOpen }) => {
+const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ }) => {
   
   const [files, setFiles] = useState<File[]>([]);
+  const [fileName, setFileName] = useState<string>('');
+
+  const fileUpload = useFileUpload();
 
   const handleDrop = React.useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
     console.log(acceptedFiles);
   }, []);
 
-  const handleUpload = () => {
-    console.log('Upload successful.');
+  const handleUpload = async () => {
+    if (files.length > 0) {
+      // use the hook to upload the file
+      const uploadSuccessful = await fileUpload(fileName, files[0]);
+      console.log('Upload successful:', uploadSuccessful);
+    }
   }
 
   return (
@@ -31,7 +37,7 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ setIsDialogOpen }
         <DialogTitle>Upload Audio File</DialogTitle>
       </DialogHeader>
       <DialogDescription className='rounded'>
-        <Input placeholder="File name" className='my-2 border rounded' />
+        <Input placeholder="File name" className='my-2 border rounded' onChange={(e) => setFileName(e.target.value)} />
         <AudioDropzone onDrop={handleDrop} files={files} />
         <CategorySelect />
       </DialogDescription>
