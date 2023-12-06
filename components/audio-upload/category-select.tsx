@@ -2,7 +2,6 @@ import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@
 import { IconBriefcase, IconGlobe, IconRocket } from "../ui/icons";
 
 const CategorySelect = () => {
-    console.log('CategorySelect is being rendered.');
     return(
         <Select>
             <SelectTrigger className="w-full mt-2">
@@ -17,7 +16,7 @@ const CategorySelect = () => {
                 </SelectItem>
                 <SelectItem value="3">
                     🍻 Informal Meeting
-                </SelectItem>
+                </SelectItem> 
                 <SelectItem value="4">
                     🗣️ Ramble
                 </SelectItem>
