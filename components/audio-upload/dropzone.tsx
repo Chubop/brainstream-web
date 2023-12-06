@@ -15,8 +15,7 @@ const AudioDropzone: React.FC<AudioDropzoneProps> = ({ onDrop, files: acceptedFi
     accept: {
       "audio/mpeg": [".mp3", ".MP3"],
       "audio/wav": [".wav", ".WAV"],
-      "x-m4a": [".m4a", ".M4A"],
-      "video/mp4": [".mp4", ".MP4"],
+      "audio/mp4": [".mp4", ".MP4", ".m4a", ".M4A"],
     }
   });  const fileNames = acceptedFiles.map(file => <p key={file.name}>{file.name}</p>);
 
