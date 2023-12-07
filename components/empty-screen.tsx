@@ -30,12 +30,12 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, "setInput">) {
           </ExternalLink>{" "}
           Console
         </h1>
-        <p className="mb-2 leading-normal text-muted-foreground">
+        <div className="mb-2 leading-normal text-muted-foreground">
           View your recording history by clicking the top-left icon.
-        </p>
-        <p className="leading-normal text-muted-foreground">
+        </div>
+        <div className="leading-normal text-muted-foreground">
           You can start a conversation here or try the following examples:
-        </p>
+        </div>
         <div className="mt-4 flex flex-col items-start space-y-2">
           {exampleMessages.map((message, index) => (
             <Button
