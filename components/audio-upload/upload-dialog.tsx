@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 import AudioDropzone from './dropzone';
 import { Input } from '../ui/input';
 import CategorySelect from './category-select';
-import { IconUpload } from '../ui/icons';
+import { IconSpinner, IconUpload } from '../ui/icons';
 import { useFileUpload } from '@/lib/hooks/use-file-upload';
 
 interface AudioUploadDialogProps {}
@@ -15,6 +15,7 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ }) => {
   
   const [files, setFiles] = useState<File[]>([]);
   const [fileName, setFileName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const fileUpload = useFileUpload();
 
@@ -24,11 +25,13 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ }) => {
   }, []);
 
   const handleUpload = async () => {
+    setIsLoading(true);
     if (files.length > 0) {
       // use the hook to upload the file
       const uploadSuccessful = await fileUpload(fileName, files[0]);
       console.log('Upload successful:', uploadSuccessful);
     }
+    setIsLoading(false);
   }
 
   return (
@@ -42,7 +45,15 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ }) => {
         <CategorySelect />
       </DialogDescription>
       <DialogFooter>
-        <Button fullWidth onClick={handleUpload}>{<IconUpload className="mr-1" />} Upload</Button>
+        <Button 
+        fullWidth 
+        onClick={handleUpload}>{
+          isLoading ? 
+          <IconSpinner className="mr-1 animate-spin" /> 
+          : 
+          <IconUpload className="mr-1" />}
+          Upload
+        </Button>
       </DialogFooter>
     </DialogContent>
   )
