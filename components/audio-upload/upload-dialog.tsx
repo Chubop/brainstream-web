@@ -7,7 +7,7 @@ import AudioDropzone from './dropzone';
 import { Input } from '../ui/input';
 import CategorySelect from './category-select';
 import { IconSpinner, IconUpload } from '../ui/icons';
-import { useFileUpload } from '@/lib/hooks/use-file-upload';
+import useFileUpload from '@/lib/hooks/use-file-upload';
 
 interface AudioUploadDialogProps {}
 
@@ -17,7 +17,7 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ }) => {
   const [fileName, setFileName] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const fileUpload = useFileUpload();
+  const { uploadFile, status } = useFileUpload();
 
   const handleDrop = React.useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
@@ -27,8 +27,8 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ }) => {
   const handleUpload = async () => {
     setIsLoading(true);
     if (files.length > 0) {
-      // use the hook to upload the file
-      const uploadSuccessful = await fileUpload(fileName, files[0]);
+      // use the hook to upload the file`
+      const uploadSuccessful = await uploadFile(files[0], fileName);
       console.log('Upload successful:', uploadSuccessful);
     }
     setIsLoading(false);
