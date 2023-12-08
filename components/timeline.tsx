@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { Badge } from './ui/badge';
 import timelineElements from './timeline/elements';
 import { useInView } from 'react-intersection-observer';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/pop-over';
 import { TimelineCard } from '@/components/timeline-card';
 
 export function Timeline() {
-  const NEW_ELEMENT_COUNT = 5
+  const NEW_ELEMENT_COUNT = 5;
   const [elementsToShow, setElementsToShow] = useState(NEW_ELEMENT_COUNT); // Initial number of elements to show
   const { ref, inView } = useInView({
     threshold: 0,

@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { getCookie, setCookie } from "cookies-next";
+import { setCookie } from "cookies-next";
 
 /**
  * This function creates a Supabase server client with cookie handling.
