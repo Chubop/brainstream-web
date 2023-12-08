@@ -1,7 +1,6 @@
 "use server";
 
-import { createSupabaseAppServerClient, createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
-import { NextRequest } from "next/server";
+import { createSupabaseAppServerClient } from "@/app/auth/supabaseAppRouterClient";
 
 export async function getSupabaseUserId(requestData: Promise<any>) {
     const supabaseClient = createSupabaseAppServerClient();
