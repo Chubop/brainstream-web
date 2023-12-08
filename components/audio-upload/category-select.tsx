@@ -1,14 +1,19 @@
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { IconBriefcase, IconGlobe, IconRocket } from "../ui/icons";
+import { cn } from "@/lib/utils";
+import { FC } from "react";
 
-const CategorySelect = () => {
-    console.log('CategorySelect is being rendered.');
+type CategorySelectProps = {
+    className?: string;
+  };
+
+const CategorySelect: FC<CategorySelectProps> = ({ className }) => {
     return(
         <Select>
             <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="What is this about?" />
             </SelectTrigger>
-            <SelectContent className='w-full flex flex-col align-middle justify-center my-2 p-2 border border-gray-300 rounded'>
+            <SelectContent className={cn("w-full flex flex-col align-middle justify-center my-2 p-2 border border-gray-300 rounded", className)}>
                 <SelectItem value="1" className="flex flex-row items-center">
                     🎙️ Interview
                 </SelectItem>
@@ -17,7 +22,7 @@ const CategorySelect = () => {
                 </SelectItem>
                 <SelectItem value="3">
                     🍻 Informal Meeting
-                </SelectItem>
+                </SelectItem> 
                 <SelectItem value="4">
                     🗣️ Ramble
                 </SelectItem>
