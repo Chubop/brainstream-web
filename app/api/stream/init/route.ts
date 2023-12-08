@@ -14,8 +14,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     const requestData = await req.json();
     let userId = await getSupabaseUserId(requestData);
-    
-    userId = userId ?? (await req.json())?.user_id;
 
     const ROUTE = "/stream/init";
     const URL = process.env.PROD_API_URL + ROUTE;
