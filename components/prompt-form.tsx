@@ -1,3 +1,5 @@
+"use client";
+
 import { UseChatHelpers } from 'ai/react'
 import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
@@ -12,6 +14,8 @@ import {
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import AudioUploadDialog from './audio-upload/upload-dialog';
+import { Dialog } from './ui/dialog';
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -26,8 +30,8 @@ export function PromptForm({
   isLoading
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
-  const router = useRouter()
 
   React.useEffect(() => {
     if (inputRef.current) {
@@ -48,13 +52,20 @@ export function PromptForm({
       ref={formRef}
     >
       <div className="relative flex max-h-60 w-full grow flex-col overflow-hidden bg-background px-8 sm:rounded-md sm:border sm:px-12">
+        
+        {isDialogOpen && (
+          <div className='m-5'>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <AudioUploadDialog setIsDialogOpen={setIsDialogOpen} />
+            </Dialog>
+          </div>
+        )}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={e => {
-                e.preventDefault()
-                router.refresh()
-                router.push('/')
+                e.preventDefault();
+                setIsDialogOpen(true);
               }}
               className={cn(
                 buttonVariants({ size: 'sm', variant: 'outline' }),
@@ -65,7 +76,7 @@ export function PromptForm({
               <span className="sr-only">New Chat</span>
             </button>
           </TooltipTrigger>
-          <TooltipContent>New Chat</TooltipContent>
+          <TooltipContent>Upload an Audio File</TooltipContent>
         </Tooltip>
         <Textarea
           ref={inputRef}
