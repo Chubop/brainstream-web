@@ -11,7 +11,9 @@ import useFileUpload from '@/lib/hooks/use-file-upload';
 import UploadAlert from './upload-alert';
 import { toast } from 'react-hot-toast';
 
-interface AudioUploadDialogProps {}
+interface AudioUploadDialogProps {
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
   const [files, setFiles] = useState<File[]>([]);
