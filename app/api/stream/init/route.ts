@@ -1,9 +1,9 @@
+// app/api/stream/init/route.ts
 "use server";
 
-import { createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
-import { fetcher } from "@/lib/utils";
-import { NextResponse, NextRequest } from "next/server";
-
+import { getSupabaseUserId } from "@/lib/supabase-utils";
+import { makePostRequest } from "@/lib/utils";
+import { NextRequest, NextResponse } from "next/server";
 
 /**
  * Handles the POST request to create a new stream with the user's ID.
@@ -12,36 +12,27 @@ import { NextResponse, NextRequest } from "next/server";
  * @returns {NextResponse} - The response object with the initialization data or an error message.
  */
 export async function POST(req: NextRequest) {
+    const requestData = await req.json();
+    let userId = await getSupabaseUserId(requestData);
+    
+    userId = userId ?? (await req.json())?.user_id;
 
-  const supabaseClient = createSupabaseServerComponentClient();
+    const ROUTE = "/stream/init";
+    const URL = process.env.PROD_API_URL + ROUTE;
+    if (!URL) {
+        throw new Error('PROD_API_URL is not set');
+    }
 
-  const session = (await supabaseClient.auth.getSession()).data.session;
-  let userId = session?.user.id ?? (await req.json())?.user_id;
+    // If no user ID is found, return an Unauthorized response
+    if (!userId) {
+        return new NextResponse("Unauthorized", {
+            status: 401,
+        });
+    }
 
-  const ROUTE = "/stream/init"
-  const URL = process.env.PROD_API_URL + ROUTE;
-  
-  // If no user ID is found, return an Unauthorized response
-  if (!userId) {
-    return new NextResponse("Unauthorized", {
-      status: 401,
-    });
-  }
+    // Send a POST request to the production API to initialize the stream
+    const data = await makePostRequest(URL, { "user_id": userId });
 
-  // Send a POST request to the production API to initialize the stream
-  const response = await fetcher(URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ "user_id": userId }),
-  });
-
-  // Parse the response data as JSON and return it
-  const data = await response.json();
-  return NextResponse.json(data, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+    // Return the response data as JSON
+    return NextResponse.json(data);
 }
