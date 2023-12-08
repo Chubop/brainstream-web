@@ -1,23 +1,38 @@
-export function useFileUpload() {
-  // This hook function is used to upload a file
-  return async (filename: string, file: File) => {
-    // Log the filename and file for debugging purposes
-    // Send a POST request to get the upload URL from the server
-    const result = await fetch(`/api/files?file=${filename}`);
-    // Extract the URL and fields from the server response
-    const { url, fields } = await result.json();
-    // Create a new FormData object for the file upload
+// useFileUpload.ts
+import { useState } from 'react';
+
+type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
+
+const useFileUpload = () => {
+  const [status, setStatus] = useState<UploadStatus>('idle');
+
+
+  const uploadFile = async (file: File, fileName: string) => {
+    setStatus('uploading');
     const formData = new FormData();
-    // Append the fields and file to the FormData object
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      formData.append(key, value as string | Blob);
-    });
-    // Send a POST request to the upload URL with the FormData
-    const upload = await fetch(url, {
-      method: "POST",
-      body: formData,
-    });
-    // Return true if the upload was successful
-    return upload.ok;
+    formData.append('file', file);
+    if (fileName) {
+      formData.append('fileName', fileName);
+    }
+
+    try {
+      const response = await fetch('/api/files', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('File upload failed');
+      }
+
+      setStatus('success');
+    } catch (error) {
+      setStatus('error');
+      console.error('Upload error:', error);
+    }
   };
-}
+
+  return { uploadFile, status };
+};
+
+export default useFileUpload;
