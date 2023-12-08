@@ -1,38 +1,24 @@
-import { createSupabaseServerComponentClient } from "@/app/auth/supabaseAppRouterClient";
-import { fetcher } from "@/lib/utils";
+import { getSupabaseUserId } from "@/lib/supabase-utils";
+import { makePostRequest, validateRequestParams } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function POST(req: NextRequest) {
+    const requestData = await req.json();
+    const userId = await getSupabaseUserId(requestData);
 
-export async function POST(req: NextRequest){
-    // Create a Supabase client for server-side operations
-    const supabaseClient = createSupabaseServerComponentClient();
-    // Attempt to retrieve the session from Supabase and extract the user ID
-    const session = (await supabaseClient.auth.getSession()).data.session;
+    validateRequestParams(requestData, ['stream_id', 'query_text']);
 
-    const ROUTE = "/chat/query"
+    const ROUTE = "/chat/query";
     const URL = process.env.PROD_API_URL + ROUTE;
+    if (!URL) {
+        throw new Error('PROD_API_URL is not set');
+    }
 
-    let requestData = await req.json();
-    let userId = session?.user.id ?? requestData?.user_id;
-    let streamId = requestData?.stream_id;
-    let queryText = requestData?.query_text || '';
-
-    // Use the fetcher function to send a POST request to the production API to process the audio
-    const data = await fetcher(URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            "user_id": userId,
-            "stream_id": streamId,
-            "query_text": queryText,
-        }),
+    const data = await makePostRequest(URL, {
+        "user_id": userId,
+        "stream_id": requestData.stream_id,
+        "query_text": requestData.query_text,
     });
 
-    return NextResponse.json(data, {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+    return NextResponse.json(data);
 }
