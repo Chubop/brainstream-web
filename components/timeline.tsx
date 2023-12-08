@@ -6,14 +6,15 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/pop-over';
 import { TimelineCard } from '@/components/timeline-card';
 
 export function Timeline() {
-  const [elementsToShow, setElementsToShow] = useState(5); // Initial number of elements to show
+  const NEW_ELEMENT_COUNT = 5
+  const [elementsToShow, setElementsToShow] = useState(NEW_ELEMENT_COUNT); // Initial number of elements to show
   const { ref, inView } = useInView({
     threshold: 0,
   });
 
   React.useEffect(() => {
     if (inView) {
-      setElementsToShow((prev) => prev + 5); // Load 3 more elements when the ref comes into view
+      setElementsToShow((prev) => prev + NEW_ELEMENT_COUNT); // Load 5 more elements when the ref comes into view
     }
   }, [inView]);
 
