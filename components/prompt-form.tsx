@@ -13,9 +13,9 @@ import {
 } from '@/components/ui/tooltip'
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
 import AudioUploadDialog from './audio-upload/upload-dialog';
 import { Dialog } from './ui/dialog';
+import { createSupabaseFrontendClient } from '@/app/auth/supabase';
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -31,7 +31,24 @@ export function PromptForm({
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [userId, setUserId] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
+  const supabaseClient = createSupabaseFrontendClient();
+
+  React.useEffect(() => {
+    async function loadSession() {
+      try {
+        const { data } = await supabaseClient.auth.getSession();
+        if (data.session?.user?.id) {
+          setUserId(data.session.user.id);
+        }
+      } catch (error) {
+        console.error('Error fetching session:', error);
+      }
+    }
+  
+    loadSession();
+  }, []);
 
   React.useEffect(() => {
     if (inputRef.current) {
@@ -60,24 +77,28 @@ export function PromptForm({
             </Dialog>
           </div>
         )}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={e => {
-                e.preventDefault();
-                setIsDialogOpen(true);
-              }}
-              className={cn(
-                buttonVariants({ size: 'sm', variant: 'outline' }),
-                'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
-              )}
-            >
-              <IconPlus />
-              <span className="sr-only">New Chat</span>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>Upload an Audio File</TooltipContent>
-        </Tooltip>
+
+        {userId && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={e => {
+                  e.preventDefault();
+                  setIsDialogOpen(true);
+                }}
+                className={cn(
+                  buttonVariants({ size: 'sm', variant: 'outline' }),
+                  'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
+                )}
+              >
+                <IconPlus />
+                <span className="sr-only">New Chat</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>Upload an Audio File</TooltipContent>
+          </Tooltip>
+        )}
+
         <Textarea
           ref={inputRef}
           tabIndex={0}
