@@ -13,7 +13,6 @@ import { useEnterSubmit } from '@/lib/hooks/use-enter-submit'
 import { cn } from '@/lib/utils'
 import AudioUploadDialog from './audio-upload/upload-dialog';
 import { Dialog } from './ui/dialog';
-import { createSupabaseFrontendClient } from '@/app/auth/supabase';
 import { useUserId } from '@/lib/hooks/use-user-id'
 
 export interface PromptProps
