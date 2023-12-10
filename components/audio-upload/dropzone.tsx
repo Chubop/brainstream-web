@@ -19,7 +19,8 @@ const AudioDropzone: React.FC<AudioDropzoneProps> = ({ onDrop, files: acceptedFi
       "audio/wav": [".wav", ".WAV"],
       "audio/mp4": [".mp4", ".MP4", ".m4a", ".M4A"],
     }
-  });  const fileNames = acceptedFiles.map(file => <div key={file.name}>{file.name}</div>);
+  });  
+  const fileNames = acceptedFiles.map(file => <div key={file.name}>{file.name}</div>);
 
   let className = 'flex flex-col items-center py-8 border-2 rounded text-gray-500 outline-none transition-colors duration-200 ease-in-out';
   className += theme === 'dark' ? ' bg-dark' : ' bg-white';
