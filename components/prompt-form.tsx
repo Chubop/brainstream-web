@@ -1,5 +1,3 @@
-"use client";
-
 import { UseChatHelpers } from 'ai/react'
 import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
@@ -16,6 +14,7 @@ import { cn } from '@/lib/utils'
 import AudioUploadDialog from './audio-upload/upload-dialog';
 import { Dialog } from './ui/dialog';
 import { createSupabaseFrontendClient } from '@/app/auth/supabase';
+import { useUserId } from '@/lib/hooks/use-user-id'
 
 export interface PromptProps
   extends Pick<UseChatHelpers, 'input' | 'setInput'> {
@@ -31,24 +30,10 @@ export function PromptForm({
 }: PromptProps) {
   const { formRef, onKeyDown } = useEnterSubmit()
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const [userId, setUserId] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
-  const supabaseClient = createSupabaseFrontendClient();
 
-  React.useEffect(() => {
-    async function loadSession() {
-      try {
-        const { data } = await supabaseClient.auth.getSession();
-        if (data.session?.user?.id) {
-          setUserId(data.session.user.id);
-        }
-      } catch (error) {
-        console.error('Error fetching session:', error);
-      }
-    }
-  
-    loadSession();
-  }, []);
+  const userId = useUserId();
+
 
   React.useEffect(() => {
     if (inputRef.current) {
