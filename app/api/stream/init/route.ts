@@ -1,7 +1,7 @@
 // app/api/stream/init/route.ts
 "use server";
 
-import { getSupabaseUserId } from "@/lib/supabase-utils";
+import { getSupabaseUserId } from "@/lib/server-utils";
 import { makePostRequest } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 

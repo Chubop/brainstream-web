@@ -1,4 +1,4 @@
-import { getSupabaseUserId } from "@/lib/supabase-utils";
+import { getSupabaseUserId } from "@/lib/server-utils";
 import { makePostRequest, validateRequestParams } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
