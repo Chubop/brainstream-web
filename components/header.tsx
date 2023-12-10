@@ -3,31 +3,22 @@
 import * as React from "react";
 import Link from "next/link";
 
-import { cn } from "@/lib/utils";
 import { clearChats } from "@/app/actions";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/sidebar";
 import { SidebarList } from "@/components/sidebar-list";
 import {
-  IconGitHub,
-  IconNextChat,
   IconSeparator,
-  IconVercel,
-  IconHome,
 } from "@/components/ui/icons";
 import { SidebarFooter } from "@/components/sidebar-footer";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ClearHistory } from "@/components/clear-history";
 import { UserMenu } from "@/components/user-menu";
-import { LoginButton } from "@/components/auth/login-button";
 import {
   createSupabaseAppServerClient,
-  createSupabaseServerComponentClient,
 } from "@/app/auth/supabaseAppRouterClient";
-import { createSupabaseFrontendClient } from "@/app/auth/supabase";
-import HeaderButton from "./header-button";
-import HeaderButtonGroup from "./header-buttons";
 import HeaderButtons from "./header-buttons";
+import NewStreamButton from "./ui/new-stream-button";
 
 export async function Header() {
   const supabaseClient = createSupabaseAppServerClient();
@@ -39,6 +30,7 @@ export async function Header() {
           <Sidebar>
             <React.Suspense fallback={<div className="flex-1 overflow-auto" />}>
               {/* @ts-ignore */}
+              <NewStreamButton />
               <SidebarList userId={session?.user?.id} />
             </React.Suspense>
             <SidebarFooter>
