@@ -1,36 +1,43 @@
+
 import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { IconBriefcase, IconGlobe, IconRocket } from "../ui/icons";
 import { cn } from "@/lib/utils";
-import { FC } from "react";
+import { FC, SetStateAction } from "react";
 
 type CategorySelectProps = {
+    setCategory: React.Dispatch<SetStateAction<string>>
     className?: string;
-  };
+};
 
-const CategorySelect: FC<CategorySelectProps> = ({ className }) => {
+const CategorySelect: FC<CategorySelectProps> = ({ setCategory, className }) => {
+
+    const onValueChange = (value: string) => {
+        console.log("New category:", value);
+        setCategory(value);
+    }
+
     return(
-        <Select>
+        <Select onValueChange={onValueChange}>
             <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="What is this about?" />
             </SelectTrigger>
             <SelectContent className={cn("w-full flex flex-col align-middle justify-center my-2 p-2 border border-gray-300 rounded", className)}>
-                <SelectItem value="1" className="flex flex-row items-center">
+                <SelectItem value="General">
+                    📄 General
+                </SelectItem>
+                <SelectItem value="interview" className="flex flex-row items-center" disabled>
                     🎙️ Interview
                 </SelectItem>
-                <SelectItem value="2">
+                <SelectItem value="formal_meeting" disabled>
                     🏛️ Formal Meeting
                 </SelectItem>
-                <SelectItem value="3">
+                <SelectItem value="informal_meeting" disabled>
                     🍻 Informal Meeting
                 </SelectItem> 
-                <SelectItem value="4">
+                <SelectItem value="ramble" disabled>
                     🗣️ Ramble
                 </SelectItem>
-                <SelectItem value="5">
+                <SelectItem value="lecture" disabled>
                     🎓 Lecture
-                </SelectItem>
-                <SelectItem value="6">
-                    📄 General
                 </SelectItem>
             </SelectContent>
         </Select>
