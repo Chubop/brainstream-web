@@ -14,15 +14,44 @@ import { fetcher } from '@/lib/utils'
 // ... (existing imports and code)
 
 // Function to create a new stream
-export async function createStream(requestData: any): Promise<any> {
-  // Implementation will ping the route.ts file and fetch the object
-  // You will need to define the logic to interact with route.ts here
+export async function createStream(): Promise<any> {
+  console.log("Triggering createStream()...")
+  const ROUTE = '/api/stream/init';
+  const URL = process.env.PROD_API_URL + ROUTE;
+  const supabaseClient = createSupabaseServerComponentClient();
+  const userId = (await supabaseClient.auth.getUser()).data.user?.id;
+  console.log("userId:", userId);
+  if (!URL) {
+    throw new Error('PROD_API_URL is not set');
+  }
+
+  try {
+    console.log("Triggering createStream()...")
+    const response = await fetcher(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ "user_id": userId }),
+    });
+
+    if (response && response.stream_id) {
+      return response;
+    } else {
+      throw new Error('Stream creation failed');
+    }
+  } catch (error) {
+    console.error("Failed to create stream:", error);
+    throw error;
+  }
 }
 
 // Function to get a single stream's history
-export async function getStream(requestData: { user_id: string; stream_id: string }): Promise<any> {
+export async function getStream(requestData: { stream_id: string }): Promise<any> {
   const ROUTE = '/stream/get_history';
   const URL = process.env.PROD_API_URL + ROUTE;
+  const supabaseClient = createSupabaseServerComponentClient();
+  const userId = (await supabaseClient.auth.getUser()).data.user?.id;
   
   if (!URL) {
     throw new Error('PROD_API_URL is not set');
@@ -37,7 +66,9 @@ export async function getStream(requestData: { user_id: string; stream_id: strin
   });
 }
 // Function to get all streams for a user
-export async function getStreams(userId: string): Promise<any> {
+export async function getStreams(): Promise<any> {
+  const supabaseClient = createSupabaseServerComponentClient();
+  const userId = (await supabaseClient.auth.getUser()).data.user?.id;
   // Implementation will fetch all streams for the given user ID
   // You will need to define the logic to retrieve all streams here
 }
@@ -49,7 +80,9 @@ export async function removeStream(streamId: string): Promise<any> {
 }
 
 // Function to clear all streams for a user
-export async function clearStreams(userId: string): Promise<any> {
+export async function clearStreams(): Promise<any> {
+  const supabaseClient = createSupabaseServerComponentClient();
+  const userId = (await supabaseClient.auth.getUser()).data.user?.id;
   // Implementation will clear all streams for the given user ID
   // You will need to define the logic to clear all streams here
 }
