@@ -6,7 +6,58 @@ import { kv } from '@vercel/kv'
 
 import { type Chat } from '@/lib/types'
 import { createSupabaseServerComponentClient } from './auth/supabaseAppRouterClient'
+import { fetcher } from '@/lib/utils'
 
+
+// New file: app/actions.ts (assuming we are adding to the existing actions.ts)
+
+// ... (existing imports and code)
+
+// Function to create a new stream
+export async function createStream(requestData: any): Promise<any> {
+  // Implementation will ping the route.ts file and fetch the object
+  // You will need to define the logic to interact with route.ts here
+}
+
+// Function to get a single stream's history
+export async function getStream(requestData: { user_id: string; stream_id: string }): Promise<any> {
+  const ROUTE = '/stream/get_history';
+  const URL = process.env.PROD_API_URL + ROUTE;
+  
+  if (!URL) {
+    throw new Error('PROD_API_URL is not set');
+  }
+
+  return fetcher(URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestData),
+  });
+}
+// Function to get all streams for a user
+export async function getStreams(userId: string): Promise<any> {
+  // Implementation will fetch all streams for the given user ID
+  // You will need to define the logic to retrieve all streams here
+}
+
+// Function to remove a specific stream
+export async function removeStream(streamId: string): Promise<any> {
+  // Implementation will remove the specified stream
+  // You will need to define the logic to remove a stream here
+}
+
+// Function to clear all streams for a user
+export async function clearStreams(userId: string): Promise<any> {
+  // Implementation will clear all streams for the given user ID
+  // You will need to define the logic to clear all streams here
+}
+
+
+///////////
+// OLD
+///////////
 export async function getChats(userId?: string | null) {
   if (!userId) {
     return []
