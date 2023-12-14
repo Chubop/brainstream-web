@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
     validateRequestParams(requestData, ['user_id', 'stream_id']);
 
-    const ROUTE = "/stream/get_history";
+    const ROUTE = "/stream/get/history";
     const URL = process.env.PROD_API_URL + ROUTE;
     if (!URL) {
         throw new Error('PROD_API_URL is not set');
