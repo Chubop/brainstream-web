@@ -8,19 +8,24 @@ import { IconSpinner } from "@/components/ui/icons";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import CheckEmailDialog from "./check-email-dialog";
 import { createSupabaseFrontendClient } from "@/app/auth/supabase";
+import { createUser } from "@/app/actions";
 
 interface SignUpButtonProps extends ButtonProps {
   text?: string;
   fullWidth?: boolean;
-  password?: string;
-  email?: string;
+  password: string;
+  email: string;
+  firstName: string;
+  lastName: string;
 }
 
 export function SignUpButton({
-  text = "Sign Up",
+  text = "Finish Sign Up",
   className,
   email = "",
   password = "",
+  firstName = "",
+  lastName = "",
   ...props
 }: SignUpButtonProps) {
 
@@ -31,16 +36,33 @@ export function SignUpButton({
 
   const handleSignUp = () => {
     setIsLoading(true);
-    supabaseClient.auth.signUp({
-      email: email,
-      password: password,
-    })
-    .then(response => {
+    supabaseClient.auth.signUp(
+      {
+        email: email,
+        password: password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+          }
+        }
+      },
+    )
+    .then(async response => {
       console.log(response);
       setIsLoading(false);
       if(response.error === null){
         // Successful email sent
         setIsDialogOpen(true); // Open the dialog on successful sign up
+        // Call createUser function after successful sign up to create user on GCP
+        const newUser = {
+          "email": email,
+          "first_name": firstName,
+          "last_name": lastName,
+          "user_id": response.data.user?.id || "",
+        }
+        console.log(newUser);
+        createUser(newUser);
       }
       else{
         alert(response.error);
@@ -51,6 +73,7 @@ export function SignUpButton({
       setIsLoading(false);
     });
   };
+
 
   return (
     <>

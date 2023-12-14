@@ -1,3 +1,5 @@
+// this will be used whenever a user sends a message.
+
 "use server";
 
 import { kv } from "@vercel/kv";

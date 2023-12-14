@@ -60,6 +60,7 @@ export function UserMenu({ user }: UserMenuProps) {
               onClick={() => {
                 router.refresh();
                 router.push('/settings');
+                console.log(supabaseClient.auth.getUser())
               }}
               target="_blank"
               rel="noopener noreferrer"
