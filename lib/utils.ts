@@ -76,3 +76,26 @@ export function validateRequestParams(params: any, requiredParams: string[]) {
         }
     }
 }
+
+/**
+ * Creates and configures a Google Cloud Storage instance.
+ * 
+ * @returns {Storage} - The configured Google Cloud Storage instance.
+ */
+export function createStorage() {
+  // Create a new Storage instance
+  const storage = new Storage();
+
+  // Set the project ID from the environment variables
+  storage.projectId = process.env.PROJECT_ID;
+
+  // Set the credentials from the environment variables
+  // Note: The private key is sanitized to replace escaped newlines with actual newlines
+  storage.credentials = {
+    client_email: process.env.CLIENT_EMAIL,
+    private_key: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  };
+
+  // Return the configured Storage instance
+  return storage;
+}
