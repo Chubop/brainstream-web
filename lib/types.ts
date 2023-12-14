@@ -10,6 +10,25 @@ export interface Chat extends Record<string, any> {
   sharePath?: string
 }
 
+export interface Stream {
+  action_use: any[];
+  audio_files: any[];
+  audio_use: number;
+  chat_history_dict: Map<string, any>;
+  created_date: Date;
+  data_files: any[];
+  embedding_token_use: number;
+  files_use: number;
+  last_updated: Date;
+  llm_completion_token_use: number;
+  llm_prompt_token_use: number;
+  llm_token_use_total: number;
+  stream_id: string;
+  stream_name: string;
+  user_id: string;
+}
+
+
 export type ServerActionResult<Result> = Promise<
   | Result
   | {
