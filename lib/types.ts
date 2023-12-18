@@ -14,7 +14,7 @@ export interface Stream {
   action_use: any[];
   audio_files: any[];
   audio_use: number;
-  chat_history_dict: Map<string, any>;
+  chat_history: any[];
   created_date: Date;
   data_files: any[];
   embedding_token_use: number;
