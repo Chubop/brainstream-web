@@ -4,7 +4,7 @@ import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 
-import { type Chat, ServerActionResult } from '@/lib/types'
+import { type Chat, ServerActionResult, Stream } from '@/lib/types'
 import { cn, formatDate } from '@/lib/utils'
 import {
   AlertDialog,
@@ -40,13 +40,13 @@ import {
 } from '@/components/ui/tooltip'
 
 interface SidebarActionsProps {
-  chat: Chat
+  stream: Stream
   removeChat: (args: { id: string; path: string }) => ServerActionResult<void>
   shareChat: (chat: Chat) => ServerActionResult<Chat>
 }
 
 export function SidebarActions({
-  chat,
+  stream,
   removeChat,
   shareChat
 }: SidebarActionsProps) {
@@ -57,12 +57,12 @@ export function SidebarActions({
   const router = useRouter()
 
   const copyShareLink = React.useCallback(async (chat: Chat) => {
-    if (!chat.sharePath) {
-      return toast.error('Could not copy share link to clipboard')
-    }
+    // if (!chat.sharePath) {
+    //   return toast.error('Could not copy share link to clipboard')
+    // }
 
     const url = new URL(window.location.href)
-    url.pathname = chat.sharePath
+    // url.pathname = chat.sharePath
     navigator.clipboard.writeText(url.toString())
     setShareDialogOpen(false)
     toast.success('Share link copied to clipboard', {
@@ -119,13 +119,13 @@ export function SidebarActions({
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-1 rounded-md border p-4 text-sm">
-            <div className="font-medium">{chat.title}</div>
+            <div className="font-medium">{stream.stream_name}</div>
             <div className="text-muted-foreground">
-              {formatDate(chat.createdAt)} · {chat.messages.length} messages
+              {formatDate(stream.created_date)} · {stream.chat_history.length} messages
             </div>
           </div>
           <DialogFooter className="items-center">
-            {chat.sharePath && (
+            {/* {chat.sharePath && (
               <Link
                 href={chat.sharePath}
                 className={cn(
@@ -137,8 +137,8 @@ export function SidebarActions({
                 <IconUsers className="mr-2" />
                 {chat.sharePath}
               </Link>
-            )}
-            <Button
+            )} */}
+            {/* <Button
               disabled={isSharePending}
               onClick={() => {
                 startShareTransition(async () => {
@@ -167,7 +167,7 @@ export function SidebarActions({
               ) : (
                 <>Copy link</>
               )}
-            </Button>
+            </Button> */}
           </DialogFooter>
         </DialogContent>
       </Dialog>
