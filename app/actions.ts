@@ -15,10 +15,8 @@ import { fetcher } from '@/lib/utils'
 
 // Function to create a new stream
 export async function createStream(): Promise<any> {
-  console.log("Entered createStream function...");
   const ROUTE = '/stream/init';
   const URL = process.env.PROD_API_URL + ROUTE;
-  console.log("URL:", URL);
   const supabaseClient = createSupabaseServerComponentClient();
   const user = await supabaseClient.auth.getUser();
   // console.log("User:", user);
@@ -30,7 +28,6 @@ export async function createStream(): Promise<any> {
   }
 
   try {
-    console.log("About to fetch from URL...");
     const response = await fetcher(URL, {
       method: 'POST',
       headers: {
@@ -51,25 +48,19 @@ export async function createStream(): Promise<any> {
   }
 }
 
-// Function to get a single stream's history
+// Function to get a single stream's details
 export async function getStream(requestData: { stream_id: string }): Promise<any> {
-  console.log("Entered getStream function...");
-  const ROUTE = '/stream/get_history';
+  const ROUTE = '/stream/get/details'; // Updated route
   const URL = process.env.PROD_API_URL + ROUTE;
-  console.log("URL:", URL);
   const supabaseClient = createSupabaseServerComponentClient();
   const user = await supabaseClient.auth.getUser();
-  // console.log("User:", user);
   const userId = user.data.user?.id;
   
-  console.log("userId from getStream:", userId);
-  console.log("streamId from body:", requestData.stream_id);
   if (!URL) {
     throw new Error('PROD_API_URL is not set');
   }
 
   try {
-    console.log("About to fetch from URL...");
     const response = await fetcher(URL, {
       method: 'POST',
       headers: {
@@ -78,7 +69,36 @@ export async function getStream(requestData: { stream_id: string }): Promise<any
       body: JSON.stringify({...requestData, "user_id": userId}),
     });
 
-    console.log("Response:", response);
+    return response;
+  } catch (error) {
+    console.error("Failed to get stream:", error);
+    throw error;
+  }
+}
+
+// Function to get a single stream's history
+export async function getStreamHistory(requestData: { stream_id: string }): Promise<any> {
+  const ROUTE = '/stream/get/history';
+  const URL = process.env.PROD_API_URL + ROUTE;
+  const supabaseClient = createSupabaseServerComponentClient();
+  const user = await supabaseClient.auth.getUser();
+  // console.log("User:", user);
+  const userId = user.data.user?.id;
+  console.log("user id:", userId);
+  
+  if (!URL) {
+    throw new Error('PROD_API_URL is not set');
+  }
+
+  try {
+    const response = await fetcher(URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({...requestData, "user_id": userId}),
+    });
+
     return response;
   } catch (error) {
     console.error("Failed to get stream:", error);
@@ -88,10 +108,22 @@ export async function getStream(requestData: { stream_id: string }): Promise<any
 
 // Function to get all streams for a user
 export async function getStreams(): Promise<any> {
-  const supabaseClient = createSupabaseServerComponentClient();
-  const userId = (await supabaseClient.auth.getUser()).data.user?.id;
-  // Implementation will fetch all streams for the given user ID
-  // You will need to define the logic to retrieve all streams here
+  // Fetch the user's details
+  const user = await getUserDetails();
+
+  // Fetch the user's streams array
+  const streamsArray = user?.streams;
+
+  if (!streamsArray) {
+    throw new Error('No streams found for this user');
+  }
+
+  // Use Promise.all() to fetch details for all streams
+  const streamsDetails = await Promise.all(
+    streamsArray.map((streamId: string) => getStream({ stream_id: streamId }))
+  );
+
+  return streamsDetails;
 }
 
 // Function to remove a specific stream
