@@ -1,7 +1,7 @@
 "use client";
 
+// Importing necessary modules and components
 import { useChat, type Message } from "ai/react";
-
 import { cn } from "@/lib/utils";
 import { ChatList } from "@/components/chat-list";
 import { ChatPanel } from "@/components/chat-panel";
@@ -20,94 +20,48 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { toast } from "react-hot-toast";
+import { Stream } from "@/lib/types";
 
+// Checking if the environment is preview
 const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
+
+// Defining the props for the Chat component
 export interface ChatProps extends React.ComponentProps<"div"> {
-  initialMessages?: Message[];
-  id?: string;
+  stream?: Stream;
 }
 
-export function Chat({ id, initialMessages, className }: ChatProps) {
-  const [previewToken, setPreviewToken] = useLocalStorage<string | null>(
-    "ai-token",
-    null
-  );
-  const [previewTokenDialog, setPreviewTokenDialog] = useState(IS_PREVIEW);
-  const [previewTokenInput, setPreviewTokenInput] = useState(
-    previewToken ?? ""
-  );
-  const { messages, append, reload, stop, isLoading, input, setInput } =
-    useChat({
-      initialMessages,
-      id,
-      body: {
-        id,
-        previewToken,
-      },
-      onResponse(response) {
-        if (response.status === 401) {
-          toast.error(response.statusText);
-        }
-      },
-    });
+// Defining the Chat component
+export function Chat({ stream }: ChatProps) {
+
+  const [messages, setMessages] = useState(stream?.chat_history || []);
+  const streamId = stream?.stream_id || "";
+  const [input, setInput] = useState("");
+
+  console.log("chat history from chat.tsx:", messages);
+
   return (
     <>
-      <div className={cn("pb-[200px] pt-4 md:pt-10", className)}>
-        {messages.length ? (
+      <div className={cn("pb-[200px] pt-4 md:pt-10")}>
+        {messages?.length ? (
           <>
+            {/* Rendering the chat list if there are messages */}
             <ChatList messages={messages} />
-            <ChatScrollAnchor trackVisibility={isLoading} />
+            <ChatScrollAnchor trackVisibility={true} />
           </>
         ) : (
+          // Rendering the empty screen if there are no messages
           <EmptyScreen setInput={setInput} />
         )}
       </div>
+      {/* // Rendering the chat panel */}
       <ChatPanel
-        id={id}
-        isLoading={isLoading}
-        stop={stop}
-        append={append}
-        reload={reload}
-        messages={messages}
+        id={streamId}
+        isLoading={false}
         input={input}
         setInput={setInput}
+        messages={messages}
+        setMessages={setMessages}
       />
-
-      <Dialog open={previewTokenDialog} onOpenChange={setPreviewTokenDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Enter your OpenAI Key</DialogTitle>
-            <DialogDescription>
-              If you have not obtained your OpenAI API key, you can do so by{" "}
-              <a
-                href="https://platform.openai.com/signup/"
-                className="underline"
-              >
-                signing up
-              </a>{" "}
-              on the OpenAI website. This is only necessary for preview
-              environments so that the open source community can test the app.
-              The token will be saved to your browser&apos;s local storage under
-              the name <code className="font-mono">ai-token</code>.
-            </DialogDescription>
-          </DialogHeader>
-          <Input
-            value={previewTokenInput}
-            placeholder="OpenAI API key"
-            onChange={(e) => setPreviewTokenInput(e.target.value)}
-          />
-          <DialogFooter className="items-center">
-            <Button
-              onClick={() => {
-                setPreviewToken(previewTokenInput);
-                setPreviewTokenDialog(false);
-              }}
-            >
-              Save Token
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

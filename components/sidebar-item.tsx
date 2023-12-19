@@ -33,7 +33,7 @@ export function SidebarItem({ stream, children }: SidebarItemProps) {
           <IconMessage className="mr-2" />
       </div>
       <Link
-        href={stream.stream_id}
+        href={"/stream/" + stream.stream_id}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
           'group w-full pl-8 pr-16',

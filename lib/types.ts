@@ -14,7 +14,7 @@ export interface Stream {
   action_use: any[];
   audio_files: any[];
   audio_use: number;
-  chat_history: any[];
+  chat_history: any;
   created_date: Date;
   data_files: any[];
   embedding_token_use: number;
@@ -26,6 +26,12 @@ export interface Stream {
   stream_id: string;
   stream_name: string;
   user_id: string;
+}
+
+export interface Message {
+  additiona_kwargs: any[],
+  content: string,
+  role: string
 }
 
 
