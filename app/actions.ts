@@ -50,7 +50,7 @@ export async function createStream(): Promise<any> {
 
 // Function to get a single stream's details
 export async function getStream(requestData: { stream_id: string }): Promise<any> {
-  const ROUTE = '/stream/get/details'; // Updated route
+  const ROUTE = 'stream/get/details'; // Updated route
   const URL = process.env.PROD_API_URL + ROUTE;
   const supabaseClient = createSupabaseServerComponentClient();
   const user = await supabaseClient.auth.getUser();
@@ -71,7 +71,7 @@ export async function getStream(requestData: { stream_id: string }): Promise<any
 
     return response;
   } catch (error) {
-    console.error("Failed to get stream:", error);
+    console.error("actions.ts:74:Failed to get stream:", error);
     throw error;
   }
 }
@@ -101,7 +101,7 @@ export async function getStreamHistory(requestData: { stream_id: string }): Prom
 
     return response;
   } catch (error) {
-    console.error("Failed to get stream:", error);
+    console.error("actions.ts:104:Failed to get stream:", error);
     throw error;
   }
 }
@@ -192,6 +192,39 @@ export async function getUserDetails(): Promise<any> {
       "user_id": userId,
     }),
   });
+}
+
+
+export async function sendQuery(requestData: {streamId: string, content: string}): Promise<any> {
+  const ROUTE = '/stream/query'
+  const URL = process.env.PROD_API_URL + ROUTE;
+
+  const userDetails = await getUserDetails();
+  const userStreamIds = userDetails.streams
+  const supabaseClient = createSupabaseServerComponentClient();
+  const userId = (await supabaseClient.auth.getUser()).data.user?.id;
+
+  if (!URL) {
+    throw new Error('PROD_API_URL is not set')
+  }
+
+  console.log('User Stream IDs:', userStreamIds);
+  console.log('Requested Stream ID:', requestData.streamId);
+  if(!userStreamIds.includes(requestData.streamId)){
+    throw new Error('Unauthorized.')
+  }
+
+  return fetcher(URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "stream_id": requestData.streamId,
+      "user_id": userId,
+      "query_text": requestData.content
+    })
+  })
 }
 
 
