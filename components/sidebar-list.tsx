@@ -1,10 +1,9 @@
 "use server";
 
-import { getChats, getStream, getStreams, getUserDetails, removeChat, shareChat } from '@/app/actions'
+import { getStreams, removeChat, shareChat } from '@/app/actions'
 import { SidebarActions } from '@/components/sidebar-actions'
 import { SidebarItem } from '@/components/sidebar-item'
 import { Stream } from '@/lib/types';
-import { createStorage } from '@/lib/utils';
 
 export interface SidebarListProps {
   userId: string;

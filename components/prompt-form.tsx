@@ -48,7 +48,7 @@ export function PromptForm({
     }
   
     loadSession();
-  }, []);
+  }, [supabaseClient.auth]);
 
   React.useEffect(() => {
     if (inputRef.current) {
