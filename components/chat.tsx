@@ -8,14 +8,6 @@ import { ChatPanel } from "@/components/chat-panel";
 import { EmptyScreen } from "@/components/empty-screen";
 import { ChatScrollAnchor } from "@/components/chat-scroll-anchor";
 import { useLocalStorage } from "@/lib/hooks/use-local-storage";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -37,8 +29,6 @@ export function Chat({ stream }: ChatProps) {
   const streamId = stream?.stream_id || "";
   const [input, setInput] = useState("");
 
-  console.log("chat history from chat.tsx:", messages);
-
   return (
     <>
       <div className={cn("pb-[200px] pt-4 md:pt-10")}>
@@ -46,7 +36,7 @@ export function Chat({ stream }: ChatProps) {
           <>
             {/* Rendering the chat list if there are messages */}
             <ChatList messages={messages} />
-            <ChatScrollAnchor trackVisibility={true} />
+            <ChatScrollAnchor trackVisibility={false} />
           </>
         ) : (
           // Rendering the empty screen if there are no messages

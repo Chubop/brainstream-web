@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { customAlphabet } from 'nanoid'
+import { notFound } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -24,7 +25,7 @@ export async function fetcher<JSON = any>(
         status: number
       }
       error.status = res.status
-      throw error
+      notFound()
     } else {
       throw new Error('An unexpected error occurred')
     }
