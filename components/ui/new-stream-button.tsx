@@ -5,6 +5,7 @@ import { Button } from "./button"
 import { IconPlus, IconSpinner } from "./icons";
 import toast from "react-hot-toast";
 import { createStream } from '@/app/actions';
+import { useRouter } from 'next/navigation';
 
 type NewStreamButton = {
     children?: string;
@@ -12,6 +13,7 @@ type NewStreamButton = {
 
 const NewStreamButton: React.FC<NewStreamButton> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const onClick = async () => {
     setIsLoading(true);
@@ -21,6 +23,7 @@ const NewStreamButton: React.FC<NewStreamButton> = ({ children }) => {
   
       if (data && data.stream_id) {
         toast.success(`Stream ${data.stream_id} created`);
+        router.push(`/stream/${data.stream_id}`);
       }
     } catch (error) {
       console.error("Error calling createStream:", error);

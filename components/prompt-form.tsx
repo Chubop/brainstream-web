@@ -1,6 +1,5 @@
 "use client";
 
-import { UseChatHelpers } from 'ai/react'
 import * as React from 'react'
 import Textarea from 'react-textarea-autosize'
 
@@ -16,10 +15,15 @@ import { cn } from '@/lib/utils'
 import AudioUploadDialog from './audio-upload/upload-dialog';
 import { Dialog } from './ui/dialog';
 import { createSupabaseFrontendClient } from '@/app/auth/supabase';
+import { useRouter, usePathname } from 'next/navigation';
+import { createStream, sendQuery } from '@/app/actions';
+import toast from 'react-hot-toast';
 
-export interface PromptProps
-  extends Pick<UseChatHelpers, 'input' | 'setInput'> {
+
+export interface PromptProps {
   onSubmit: (value: string) => Promise<void>
+  input: string
+  setInput: (value: string) => void
   isLoading: boolean
 }
 
@@ -34,6 +38,9 @@ export function PromptForm({
   const [userId, setUserId] = React.useState<string | null>(null);
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const supabaseClient = createSupabaseFrontendClient();
+
+  const router = useRouter();
+  const pathname = usePathname();
 
   React.useEffect(() => {
     async function loadSession() {
@@ -59,12 +66,12 @@ export function PromptForm({
   return (
     <form
       onSubmit={async e => {
-        e.preventDefault()
+        e.preventDefault();
+        setInput('')
+        await onSubmit(input);
         if (!input?.trim()) {
           return
         }
-        setInput('')
-        await onSubmit(input)
       }}
       ref={formRef}
     >
