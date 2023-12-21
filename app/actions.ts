@@ -208,8 +208,6 @@ export async function sendQuery(requestData: {streamId: string, content: string}
     throw new Error('PROD_API_URL is not set')
   }
 
-  console.log('User Stream IDs:', userStreamIds);
-  console.log('Requested Stream ID:', requestData.streamId);
   if(!userStreamIds.includes(requestData.streamId)){
     throw new Error('Unauthorized.')
   }

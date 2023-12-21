@@ -48,11 +48,5 @@ export default async function StreamPage({ params }: StreamPageProps) {
     notFound();
   }
 
-  // if (stream?.stream_id !== session?.user?.id) { // Use user_id instead of userId
-  //   console.log("User ID does not match session user ID");
-  //   console.log("Stream's User ID:", stream?.user_id, "\t User ID:", session?.user?.id)
-  //   notFound();
-  // }
-
   return <Chat stream={stream} />; // Use Stream component and stream_id instead of id
 }

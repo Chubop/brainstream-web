@@ -12,16 +12,13 @@ export function ChatList({ messages }: ChatList) {
     return null;
   }
 
-  console.log("hello! how are you?");
-
   return (
     <div className="relative mx-auto max-w-2xl px-4">
       {messages.map((message, index) => {
-        console.log("chat-list message:", message);
         return (
           <>
             <ChatMessage key={index} message={message} />
-            {index < messages.length - 1 && <Separator className="my-4 md:my-8" />}
+            {index < messages.length - 1 && <Separator key={message.content} className="my-4 md:my-8" />}
           </>
         );
       })}
