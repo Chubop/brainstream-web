@@ -31,7 +31,8 @@ export interface Stream {
 export interface Message {
   additiona_kwargs: any[],
   content: string,
-  role: string
+  role: string,
+  isLoading: boolean
 }
 
 

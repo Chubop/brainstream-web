@@ -23,7 +23,9 @@ const NewStreamButton: React.FC<NewStreamButton> = ({ children }) => {
   
       if (data && data.stream_id) {
         toast.success(`Stream ${data.stream_id} created`);
+        router.prefetch(`/stream/${data.stream_id}`)
         router.push(`/stream/${data.stream_id}`);
+        router.refresh();
       }
     } catch (error) {
       console.error("Error calling createStream:", error);

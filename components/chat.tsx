@@ -7,11 +7,7 @@ import { ChatList } from "@/components/chat-list";
 import { ChatPanel } from "@/components/chat-panel";
 import { EmptyScreen } from "@/components/empty-screen";
 import { ChatScrollAnchor } from "@/components/chat-scroll-anchor";
-import { useLocalStorage } from "@/lib/hooks/use-local-storage";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { toast } from "react-hot-toast";
 import { Stream } from "@/lib/types";
 
 // Checking if the environment is preview
@@ -25,12 +21,15 @@ export interface ChatProps extends React.ComponentProps<"div"> {
 // Defining the Chat component
 export function Chat({ stream }: ChatProps) {
 
+  const mockChatHistory = [{ additional_kwargs: {}, content: 'hey', role: 'user' }, { additional_kwargs: {}, content: 'Hello! How can I assist you today?', role: 'assistant'}]
+  console.log("Current Stream Chat History:", stream?.chat_history)
   const [messages, setMessages] = useState(stream?.chat_history || []);
   const streamId = stream?.stream_id || "";
   const [input, setInput] = useState("");
 
   return (
     <>
+    {console.log("Current Messages in chat.tsx, the originator: ", messages)}
       <div className={cn("pb-[200px] pt-4 md:pt-10")}>
         {messages?.length ? (
           <>
