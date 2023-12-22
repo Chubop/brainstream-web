@@ -39,8 +39,6 @@ export function PromptForm({
   const inputRef = React.useRef<HTMLTextAreaElement>(null)
   const supabaseClient = createSupabaseFrontendClient();
 
-  const router = useRouter();
-  const pathname = usePathname();
 
   React.useEffect(() => {
     async function loadSession() {
