@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { customAlphabet } from 'nanoid'
+import { notFound } from 'next/navigation'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -24,7 +25,7 @@ export async function fetcher<JSON = any>(
         status: number
       }
       error.status = res.status
-      throw error
+      notFound()
     } else {
       throw new Error('An unexpected error occurred')
     }
@@ -75,4 +76,27 @@ export function validateRequestParams(params: any, requiredParams: string[]) {
             throw new Error(`Missing request body parameter (expecting ${requiredParams.join(' and ')})`);
         }
     }
+}
+
+/**
+ * Creates and configures a Google Cloud Storage instance.
+ * 
+ * @returns {Storage} - The configured Google Cloud Storage instance.
+ */
+export function createStorage() {
+  // Create a new Storage instance
+  const storage = new Storage();
+
+  // Set the project ID from the environment variables
+  storage.projectId = process.env.PROJECT_ID;
+
+  // Set the credentials from the environment variables
+  // Note: The private key is sanitized to replace escaped newlines with actual newlines
+  storage.credentials = {
+    client_email: process.env.CLIENT_EMAIL,
+    private_key: process.env.PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  };
+
+  // Return the configured Storage instance
+  return storage;
 }

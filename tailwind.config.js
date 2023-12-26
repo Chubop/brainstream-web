@@ -89,6 +89,7 @@ module.exports = {
           "slide-to-left 0.25s cubic-bezier(0.82, 0.085, 0.395, 0.895)",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": 'fade-in 0.5s ease-out',
       },
     },
   },
