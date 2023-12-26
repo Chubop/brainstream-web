@@ -1,56 +1,55 @@
-"use client";
+'use client';
 
 // Importing necessary modules and components
-import { useChat, type Message } from "ai/react";
-import { cn } from "@/lib/utils";
-import { ChatList } from "@/components/chat-list";
-import { ChatPanel } from "@/components/chat-panel";
-import { EmptyScreen } from "@/components/empty-screen";
-import { ChatScrollAnchor } from "@/components/chat-scroll-anchor";
-import { useState } from "react";
-import { Stream } from "@/lib/types";
+import { cn } from '@/lib/utils';
+import { ChatList } from '@/components/chat-list';
+import { ChatPanel } from '@/components/chat-panel';
+import { EmptyScreen } from '@/components/empty-screen';
+import { ChatScrollAnchor } from '@/components/chat-scroll-anchor';
+import { useState } from 'react';
+import { Stream } from '@/lib/types';
 
 // Checking if the environment is preview
-const IS_PREVIEW = process.env.VERCEL_ENV === "preview";
+// const IS_PREVIEW = process.env.VERCEL_ENV === 'preview';
 
 // Defining the props for the Chat component
-export interface ChatProps extends React.ComponentProps<"div"> {
-  stream?: Stream;
+export interface ChatProps extends React.ComponentProps<'div'> {
+    stream?: Stream;
 }
 
 // Defining the Chat component
 export function Chat({ stream }: ChatProps) {
+    const [messages, setMessages] = useState(stream?.chat_history || []);
+    const streamId = stream?.stream_id || '';
+    const [input, setInput] = useState('');
 
-  const mockChatHistory = [{ additional_kwargs: {}, content: 'hey', role: 'user' }, { additional_kwargs: {}, content: 'Hello! How can I assist you today?', role: 'assistant'}]
-  console.log("Current Stream Chat History:", stream?.chat_history)
-  const [messages, setMessages] = useState(stream?.chat_history || []);
-  const streamId = stream?.stream_id || "";
-  const [input, setInput] = useState("");
-
-  return (
-    <>
-    {console.log("Current Messages in chat.tsx, the originator: ", messages)}
-      <div className={cn("pb-[200px] pt-4 md:pt-10")}>
-        {messages?.length ? (
-          <>
-            {/* Rendering the chat list if there are messages */}
-            <ChatList messages={messages} />
-            <ChatScrollAnchor trackVisibility={false} />
-          </>
-        ) : (
-          // Rendering the empty screen if there are no messages
-          <EmptyScreen setInput={setInput} />
-        )}
-      </div>
-      {/* // Rendering the chat panel */}
-      <ChatPanel
-        id={streamId}
-        isLoading={false}
-        input={input}
-        setInput={setInput}
-        messages={messages}
-        setMessages={setMessages}
-      />
-    </>
-  );
+    return (
+        <>
+            {console.log(
+                'Current Messages in chat.tsx, the originator: ',
+                messages
+            )}
+            <div className={cn('pb-[200px] pt-4 md:pt-10')}>
+                {messages?.length ? (
+                    <>
+                        {/* Rendering the chat list if there are messages */}
+                        <ChatList messages={messages} />
+                        <ChatScrollAnchor trackVisibility={false} />
+                    </>
+                ) : (
+                    // Rendering the empty screen if there are no messages
+                    <EmptyScreen setInput={setInput} />
+                )}
+            </div>
+            {/* // Rendering the chat panel */}
+            <ChatPanel
+                id={streamId}
+                isLoading={false}
+                input={input}
+                setInput={setInput}
+                messages={messages}
+                setMessages={setMessages}
+            />
+        </>
+    );
 }
