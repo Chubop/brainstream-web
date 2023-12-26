@@ -18,10 +18,8 @@ export async function createStream(): Promise<any> {
     const URL = process.env.PROD_API_URL + ROUTE;
     const supabaseClient = createSupabaseServerComponentClient();
     const user = await supabaseClient.auth.getUser();
-    // console.log("User:", user);
     const userId = user.data.user?.id;
 
-    console.log('userId from createStream:', userId);
     if (!URL) {
         throw new Error('PROD_API_URL is not set');
     }
@@ -35,7 +33,6 @@ export async function createStream(): Promise<any> {
             body: JSON.stringify({ user_id: userId }),
         });
 
-        console.log('Response:', response);
         if (response && response.stream_id) {
             return response;
         } else {
@@ -85,9 +82,7 @@ export async function getStreamHistory(requestData: {
     const URL = process.env.PROD_API_URL + ROUTE;
     const supabaseClient = createSupabaseServerComponentClient();
     const user = await supabaseClient.auth.getUser();
-    // console.log("User:", user);
     const userId = user.data.user?.id;
-    console.log('user id:', userId);
 
     if (!URL) {
         throw new Error('PROD_API_URL is not set');
@@ -111,14 +106,11 @@ export async function getStreamHistory(requestData: {
 
 // Function to get all streams for a user
 export async function getStreams(): Promise<any> {
-    console.log('Fetching user details for streams...');
     // Fetch the user's details
     const user = await getUserDetails();
-    console.log('User details fetched:', user);
 
     // Fetch the user's streams array
     const streamsArray = user?.streams;
-    console.log('User streams array:', streamsArray);
 
     if (!streamsArray) {
         console.error('No streams found for this user');
@@ -126,13 +118,11 @@ export async function getStreams(): Promise<any> {
     }
 
     // Use Promise.all() to fetch details for all streams
-    console.log('Fetching details for all streams...');
     const streamsDetails = await Promise.all(
         streamsArray.map((streamId: string) =>
             getStream({ stream_id: streamId })
         )
     );
-    console.log('Streams details fetched:', streamsDetails);
 
     return streamsDetails;
 }
@@ -165,8 +155,6 @@ export async function createUser(requestData: {
         throw new Error('PROD_API_URL is not set');
     }
 
-    console.log('Firing createUser...');
-
     return fetcher(URL, {
         method: 'POST',
         headers: {
@@ -180,7 +168,6 @@ export async function createUser(requestData: {
         }),
     })
         .then((response) => {
-            console.log('User creation was successful:', response);
             return response;
         })
         .catch((error) => {
@@ -196,13 +183,9 @@ export async function getUserDetails(): Promise<any> {
     const supabaseClient = createSupabaseServerComponentClient();
     const userId = (await supabaseClient.auth.getUser()).data.user?.id;
 
-    console.log('\tFetching user details for user ID:', userId);
-
     if (!URL) {
         throw new Error('PROD_API_URL is not set');
     }
-
-    console.log('\tUser details request URL:', URL);
 
     return fetcher(URL, {
         method: 'POST',
@@ -214,7 +197,6 @@ export async function getUserDetails(): Promise<any> {
         }),
     })
         .then((response) => {
-            console.log('\tUser details fetched successfully:', response);
             return response;
         })
         .catch((error) => {

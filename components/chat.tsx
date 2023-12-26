@@ -25,10 +25,6 @@ export function Chat({ stream }: ChatProps) {
 
     return (
         <>
-            {console.log(
-                'Current Messages in chat.tsx, the originator: ',
-                messages
-            )}
             <div className={cn('pb-[200px] pt-4 md:pt-10')}>
                 {messages?.length ? (
                     <>
