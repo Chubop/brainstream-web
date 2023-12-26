@@ -7,22 +7,29 @@ import { Stream } from '@/lib/types';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Skeleton } from './skeleton';
+import { useLocalStorage } from '@/lib/hooks/use-local-storage';
 
 export interface SidebarListProps {
     userId: string;
 }
 
 export function SidebarList({ userId }: SidebarListProps) {
-    const [streams, setStreams] = useState<Stream[] | null>(null);
+    const [streams, setStreams] = useLocalStorage<Stream[] | null>(
+        'streams',
+        null
+    );
 
     useEffect(() => {
         const fetchStreams = async () => {
-            const streamsData = await getStreams();
-            setStreams(streamsData);
+            // Only fetch streams if they are not already stored
+            if (!streams) {
+                const streamsData = await getStreams();
+                setStreams(streamsData);
+            }
         };
 
         fetchStreams();
-    }, [userId]);
+    }, [userId, streams, setStreams]);
 
     if (streams === null) {
         return (
