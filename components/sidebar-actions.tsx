@@ -196,25 +196,25 @@ export function SidebarActions({
                         </AlertDialogCancel>
                         <AlertDialogAction
                             disabled={isRemovePending}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                startRemoveTransition(async () => {
-                                    const result = await removeChat({
-                                        id: chat.id,
-                                        path: chat.path,
-                                    });
+                            // onClick={(event) => {
+                            //     event.preventDefault();
+                            //     startRemoveTransition(async () => {
+                            //         const result = await removeChat({
+                            //             id: chat.id,
+                            //             path: chat.path,
+                            //         });
 
-                                    if (result && 'error' in result) {
-                                        toast.error(result.error);
-                                        return;
-                                    }
+                            //         if (result && 'error' in result) {
+                            //             toast.error(result.error);
+                            //             return;
+                            //         }
 
-                                    setDeleteDialogOpen(false);
-                                    router.refresh();
-                                    router.push('/');
-                                    toast.success('Chat deleted');
-                                });
-                            }}
+                            //         setDeleteDialogOpen(false);
+                            //         router.refresh();
+                            //         router.push('/');
+                            //         toast.success('Chat deleted');
+                            //     });
+                            // }}
                         >
                             {isRemovePending && (
                                 <IconSpinner className="mr-2 animate-spin" />
