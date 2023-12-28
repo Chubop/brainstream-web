@@ -3,19 +3,18 @@
 import * as React from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import { IconArrowElbow, IconPlus, IconUpload } from '@/components/ui/icons';
+import { Button } from '@/components/ui/button';
+import { IconArrowElbow } from '@/components/ui/icons';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit';
-import { cn } from '@/lib/utils';
 import AudioUploadDialog from './audio-upload/upload-dialog';
 import { Dialog } from './ui/dialog';
 import { createSupabaseFrontendClient } from '@/app/auth/supabase';
-import { useUserId } from '@/lib/hooks/use-user-id';
+import AudioDropdown from './audio-upload/audio-dropdown';
 
 export interface PromptProps {
     onSubmit: (value: string) => Promise<void>;
@@ -83,29 +82,7 @@ export function PromptForm({
                     </div>
                 )}
 
-                {userId && (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setIsDialogOpen(true);
-                                }}
-                                className={cn(
-                                    buttonVariants({
-                                        size: 'sm',
-                                        variant: 'outline',
-                                    }),
-                                    'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
-                                )}
-                            >
-                                <IconUpload />
-                                <span className="sr-only">New Chat</span>
-                            </button>
-                        </TooltipTrigger>
-                        <TooltipContent>Upload an Audio File</TooltipContent>
-                    </Tooltip>
-                )}
+                {userId && <AudioDropdown setIsDialogOpen={setIsDialogOpen} />}
 
                 <Textarea
                     ref={inputRef}
