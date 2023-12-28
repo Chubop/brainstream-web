@@ -1,5 +1,4 @@
 import { sendQuery } from '@/app/actions';
-import { usePathname } from 'next/navigation';
 
 export async function append(
     data: { streamId: string; content: string; role: string },
