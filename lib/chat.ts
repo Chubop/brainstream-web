@@ -4,39 +4,40 @@ export async function append(
     data: { streamId: string; content: string; role: string },
     setMessages: React.Dispatch<React.SetStateAction<any[]>>
 ) {
-    let newMessages: any[] = [];
-
     if (data.role === 'user') {
-        setMessages((prevMessages) => {
-            if (
-                prevMessages.length === 0 ||
-                !prevMessages[prevMessages.length - 1].isLoading
-            ) {
-                newMessages = [
-                    ...prevMessages,
-                    { content: '', role: 'assistant', isLoading: true },
-                ];
-            } else {
-                newMessages = [...prevMessages];
-            }
-            return newMessages;
-        });
+        // Add an optimistic loading message for the assistant
+        setMessages(prevMessages => [
+            ...prevMessages,
+            { content: '', role: 'assistant', isLoading: true },
+        ]);
+
+        // Send the query to the server and wait for the response
         const response = await sendQuery({
             streamId: data.streamId,
             content: data.content,
         });
-        setMessages((prevMessages) => {
-            newMessages = [...prevMessages];
-            // Check if newMessages array is not empty before assigning value to avoid -1 index
-            if (newMessages.length > 2) {
-                newMessages[newMessages.length - 1] = {
+
+        // Update the messages with the server's response
+        setMessages(prevMessages => {
+            const newMessages = [...prevMessages];
+            // Find the last assistant message that is loading
+            const lastLoadingIndex = newMessages.findIndex(
+                (message, index) => 
+                    message.role === 'assistant' && 
+                    message.isLoading && 
+                    index === newMessages.length - 1
+            );
+
+            // If found, update it with the response
+            if (lastLoadingIndex !== -1) {
+                newMessages[lastLoadingIndex] = {
                     content: response.response_text,
                     role: 'assistant',
                     isLoading: false,
                 };
             }
+
             return newMessages;
         });
     }
-    return newMessages;
 }
