@@ -1,9 +1,13 @@
-import { useEffect, useState, useRef } from "react";
-import { IconMicrophone } from "../ui/icons";
-import { useSearchParams } from "next/navigation";
+"use client";
+
+import { useEffect, useState, useRef, useTransition } from "react";
+import { IconMicrophone, IconSpinner } from "../ui/icons";
+import { useRouter, useSearchParams } from "next/navigation";
 import useFileUpload from "@/lib/hooks/use-file-upload";
 import { processAudio } from "@/app/actions";
 import { useUserId } from "@/lib/hooks/use-user-id";
+import { useCreateStream } from "@/lib/hooks/use-create-stream";
+import { cn } from "@/lib/utils";
 
 type AudioCircleProps = {
     children: React.ReactNode,
@@ -42,22 +46,26 @@ const AudioCircle = ({children, recording, amplitude = 0, sm, md, lg, multiplier
     )
 }
 
-type RecordProps = {
-    // Define your props here if needed
-  }
+type RecordProps = {}
 
 export default function Recorder(props: RecordProps) {
+  // states
   const [permission, setPermission] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [recording, setRecording] = useState(false);
   const [amplitude, setAmplitude] = useState(0);
+  const [isLoading, setLoading] = useState(false);
   
+  // refs
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
+  // hooks
   const params = useSearchParams()
   const { uploadFile, status } = useFileUpload();
   const userId = useUserId();
+  const { createStreamOnly } = useCreateStream();
+  const router = useRouter();
 
 
   const handleRecording = () => {
@@ -78,7 +86,7 @@ export default function Recorder(props: RecordProps) {
 
   
   const handleDataAvailable = async (event: BlobEvent) => {
-    console.log('handleDataAvailable called with event:', event);
+    setLoading(true);
     const fileName = 'user_recording';
     const audioBlob = event.data;
     // Calculate and log the duration of the audio file/blob
@@ -86,22 +94,43 @@ export default function Recorder(props: RecordProps) {
     console.log(`Audio duration: ${audioDuration.toFixed(2)} seconds`);
     const audioFile = new File([audioBlob], 'recording.wav', { type: 'audio/wav' });
     const uploadSuccess = await uploadFile(audioFile, fileName); // Adjust the file name as needed
+    
+    let streamId = params.get("stream");
+    if(!streamId){
+        streamId = await createStreamOnly();
+    }
 
     const requestData = {
         user_id: userId,
-        stream_id: params.get("stream") || "",
+        stream_id: streamId || "",
         audio_name: fileName,
         audio_file_blob_name: fileName + '.wav',
         transcription_method: 'DG',
         category: 'General',
     }
-    console.log("Processing audio with request data object:", requestData);
     await processAudio(requestData);
 
     if (uploadSuccess) {
       console.log('File uploaded successfully');
+      router.refresh();
+      router.push(`/stream/${streamId}`)
     } else {
       console.error('File upload failed');
+    }
+    setLoading(false);
+  };
+
+
+  const renderMicrophoneIcon = () => {
+    if (!permission) {
+      return "Click for Permission";
+    }
+    if (isLoading) {
+      return <IconSpinner className="h-12 w-12 animate-spin" />;
+    } else if (recording) {
+      return <IconMicrophone className="h-12 w-12 text-red-500" />;
+    } else {
+      return <IconMicrophone className="h-12 w-12" />;
     }
   };
 
@@ -159,15 +188,17 @@ export default function Recorder(props: RecordProps) {
       onClick={() => {
         if (!permission) {
           getMicrophonePermission();
-        } else {
+        } else if(!isLoading){
           handleRecording();
         }
       }}
-      className="flex items-center justify-center w-96 h-96 cursor-pointer">
+      className={cn("flex items-center justify-center w-96 h-96", !isLoading && "cursor-pointer")}>
       <AudioCircle recording={recording} lg amplitude={amplitude} multiplier={0.1} className="bg-gradient-to-r from-zinc-800 to-zinc-700">
         <AudioCircle recording={recording} md className={`animate-gradient-x bg-gradient-to-r from-zinc-700 to-zinc-500`}>            
           <AudioCircle recording={recording} sm amplitude={amplitude} multiplier={0.75} className="bg-slate-200">
-              {!permission ? "Click" : recording ? <IconMicrophone className="h-12 w-12 text-red-500"/> : <IconMicrophone className="h-12 w-12"/>}
+            <div className="flex items-center align-center justify-center text-xs">
+              {renderMicrophoneIcon()}
+            </div>
           </AudioCircle>
         </AudioCircle>
       </AudioCircle>
