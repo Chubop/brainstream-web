@@ -660,6 +660,25 @@ function IconHamburger({ className, ...props }: React.ComponentProps<'svg'>) {
     );
 }
 
+function IconMicrophone({ className, ...props }: React.ComponentProps<'svg'>) {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 14 21"
+            fill="currentColor"
+            className={cn('h-4 w-4', className)}
+            {...props}
+        >
+            <title>Microphone Icon</title>
+            <g fill="none" fill-rule="evenodd">
+                <g fill="currentColor" transform="translate(0, 0.5)">
+                    <path d="M7,12 C8.7,12 10,10.7 10,9 L10,3 C10,1.3 8.7,0 7,0 C5.3,0 4,1.3 4,3 L4,9 C4,10.7 5.3,12 7,12 Z M12.3,9 C12.3,12 9.8,14.1 7,14.1 C4.2,14.1 1.7,12 1.7,9 L0,9 C0,12.4 2.7,15.2 6,15.7 L6,19 L8,19 L8,15.7 C11.3,15.2 14,12.4 14,9 L12.3,9 Z"/>
+                </g>
+            </g>
+        </svg>
+    );
+}
+
 export {
     IconEdit,
     IconNextChat,
@@ -696,4 +715,5 @@ export {
     IconGlobe,
     IconRocket,
     IconHamburger,
+    IconMicrophone,
 };
