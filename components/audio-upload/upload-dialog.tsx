@@ -10,8 +10,8 @@ import { IconSpinner, IconUpload } from '../ui/icons';
 import useFileUpload from '@/lib/hooks/use-file-upload';
 import UploadAlert from './upload-alert';
 import { toast } from 'react-hot-toast';
-import { fetcher } from '@/lib/utils';
 import { useUserId } from '@/lib/hooks/use-user-id';
+import { processAudio } from '@/app/actions';
 
 interface AudioUploadDialogProps {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,21 +52,8 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
     };
     console.log("Sending postAudioPorcessingData request using body", requestData);
   
-    try {
-      const responseData = await fetcher('/api/process/audio/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      });
-      console.log("Response Data:", responseData);
-      // Handle the response data if needed
-    } catch (error) {
-      console.error('Error posting to /api/process/audio/:', error);
-      setAlertMessage("Failed to process audio. Please try again.");
-      setShowUploadAlert(true);
-    }
+    await processAudio(requestData);
+
   };
 
 
@@ -81,7 +68,9 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
   }, []);
 
   const handleUpload = async () => {
+    alert()
     setIsLoading(true);
+    console.log("Current fileName:", fileName);
     if (files.length > 0) {
       const uploadSuccessful = await uploadFile(files[0], fileName);
       if (!uploadSuccessful) {
