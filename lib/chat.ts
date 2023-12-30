@@ -10,6 +10,12 @@ export async function append(
             ...prevMessages,
             { content: '', role: 'assistant', isLoading: true },
         ]);
+        setTimeout(() => {
+            window.scrollTo({
+                top: document.body.offsetHeight,
+            });
+        }, 0);
+
 
         // Send the query to the server and wait for the response
         const response = await sendQuery({
@@ -27,6 +33,7 @@ export async function append(
                     message.isLoading && 
                     index === newMessages.length - 1
             );
+            
 
             // If found, update it with the response
             if (lastLoadingIndex !== -1) {
@@ -36,7 +43,10 @@ export async function append(
                     isLoading: false,
                 };
             }
-
+            window.scrollTo({
+                top: document.body.offsetHeight,
+                behavior: 'smooth'
+            })
             return newMessages;
         });
     }
