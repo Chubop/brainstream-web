@@ -128,7 +128,9 @@ export default function Recorder(props: RecordProps) {
     if (isLoading) {
       return <IconSpinner className="h-12 w-12 animate-spin" />;
     } else if (recording) {
-      return <IconMicrophone className="h-12 w-12 text-red-500" />;
+      return (
+        <IconMicrophone className={`h-12 w-12 animate-pulse text-red-500`}/>
+      );
     } else {
       return <IconMicrophone className="h-12 w-12" />;
     }
