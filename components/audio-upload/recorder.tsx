@@ -32,7 +32,7 @@ const AudioCircle = ({children, recording, amplitude = 0, sm, md, lg, multiplier
 
     return(
         <div
-        className={`rounded-full text-black flex justify-center items-center ${className || ''}`}
+        className={`flex items-center justify-center rounded-full text-black ${className || ''}`}
         style={{
             height: `calc(${size} + ${adjustedAmplitude}px)`,
             width: `calc(${size} + ${adjustedAmplitude}px)`,
@@ -194,11 +194,11 @@ export default function Recorder(props: RecordProps) {
           handleRecording();
         }
       }}
-      className={cn("flex items-center justify-center w-96 h-96", !isLoading && "cursor-pointer")}>
-      <AudioCircle recording={recording} lg amplitude={amplitude} multiplier={0.1} className="bg-gradient-to-r from-zinc-800 to-zinc-700">
-        <AudioCircle recording={recording} md className={`animate-gradient-x bg-gradient-to-r from-zinc-700 to-zinc-500`}>            
-          <AudioCircle recording={recording} sm amplitude={amplitude} multiplier={0.75} className="bg-slate-200">
-            <div className="flex items-center align-center justify-center text-xs">
+      className={cn("flex h-96 w-96 items-center justify-center", !isLoading && "cursor-pointer")}>
+      <AudioCircle recording={recording} lg amplitude={amplitude} multiplier={0.1} className="to slate-200 bg-gradient-to-r from-gray-200 dark:from-zinc-800 dark:to-zinc-700">
+        <AudioCircle recording={recording} md className={`animate-gradient-x bg-gradient-to-r from-zinc-300 to-zinc-100 dark:from-zinc-700 dark:to-zinc-500`}>            
+          <AudioCircle recording={recording} sm amplitude={amplitude} multiplier={0.75} className="bg-gray-50 dark:bg-slate-200">
+            <div className="align-center flex items-center justify-center text-xs">
               {renderMicrophoneIcon()}
             </div>
           </AudioCircle>
