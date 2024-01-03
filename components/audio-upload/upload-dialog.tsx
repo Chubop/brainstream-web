@@ -17,7 +17,7 @@ interface AudioUploadDialogProps {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
+const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ setIsDialogOpen }) => {
   
   const [files, setFiles] = useState<File[]>([]);
   const [fileName, setFileName] = useState<string>('');
@@ -65,10 +65,10 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
     } else {
       setFiles(acceptedFiles);
     }
-  }, []);
+  }, [MAX_FILE_SIZE_BYTES]);
+
 
   const handleUpload = async () => {
-    alert()
     setIsLoading(true);
     console.log("Current fileName:", fileName);
     if (files.length > 0) {
@@ -80,6 +80,7 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
       else {
         await postAudioProcessingData(fileName);
         toast.success("File was uploaded successfully.");
+        setIsDialogOpen(false);
       }
     }
     setIsLoading(false);
@@ -91,12 +92,12 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = () => {
 
   return (
     <React.Fragment>
-      <DialogContent className='flex flex-col spacing-y-6 rounded'>
+      <DialogContent className='spacing-y-6 flex flex-col rounded'>
         <DialogHeader className='mb-4'>
           <DialogTitle>Upload Audio File</DialogTitle>
         </DialogHeader>
         <DialogDescription className='rounded'>
-          <Input placeholder="File name" value={fileName} className='my-2 border rounded' onChange={(e) => setFileName(e.target.value)} />
+          <Input placeholder="File name" value={fileName} className='my-2 rounded border' onChange={(e) => setFileName(e.target.value)} />
           <AudioDropzone onDrop={handleDrop} files={files} />
           <CategorySelect setCategory={setCategory} />
         </DialogDescription>
