@@ -17,26 +17,26 @@ const CategorySelect: FC<CategorySelectProps> = ({ setCategory, className }) => 
 
     return(
         <Select onValueChange={onValueChange}>
-            <SelectTrigger className="mt-2 w-full">
+            <SelectTrigger className="w-full mt-2">
                 <SelectValue placeholder="What is this about?" />
             </SelectTrigger>
-            <SelectContent className={cn("my-2 flex w-full flex-col justify-center rounded border border-gray-300 p-2 align-middle", className)}>
+            <SelectContent className={cn("w-full flex flex-col align-middle justify-center my-2 p-2 border border-gray-300 rounded", className)}>
                 <SelectItem value="General">
                     📄 General
                 </SelectItem>
-                <SelectItem value="Interview" className="flex flex-row items-center">
+                <SelectItem value="interview" className="flex flex-row items-center" disabled>
                     🎙️ Interview
                 </SelectItem>
-                <SelectItem value="Formal Meeting">
+                <SelectItem value="formal_meeting" disabled>
                     🏛️ Formal Meeting
                 </SelectItem>
-                <SelectItem value="Informal Meeting">
+                <SelectItem value="informal_meeting" disabled>
                     🍻 Informal Meeting
                 </SelectItem> 
-                <SelectItem value="Ramble">
+                <SelectItem value="ramble" disabled>
                     🗣️ Ramble
                 </SelectItem>
-                <SelectItem value="Lecture">
+                <SelectItem value="lecture" disabled>
                     🎓 Lecture
                 </SelectItem>
             </SelectContent>

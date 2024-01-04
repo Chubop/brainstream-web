@@ -5,6 +5,7 @@ import { Message } from '@/lib/types';
 import { PromptForm } from '@/components/prompt-form';
 import { ButtonScrollToBottom } from '@/components/button-scroll-to-bottom';
 import { FooterText } from '@/components/footer';
+import toast from 'react-hot-toast';
 import { useOptimisticMessage } from '@/lib/hooks/use-optimistic-message';
 
 export interface ChatPanelProps {

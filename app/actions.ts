@@ -7,8 +7,10 @@ import { kv } from '@vercel/kv';
 import { type Chat } from '@/lib/types';
 import { createSupabaseServerComponentClient } from './auth/supabaseAppRouterClient';
 import { fetcher } from '@/lib/utils';
-import { getSupabaseUserId } from '@/lib/server-utils';
 
+// New file: app/actions.ts (assuming we are adding to the existing actions.ts)
+
+// ... (existing imports and code)
 
 // Function to create a new stream
 export async function createStream(): Promise<any> {
@@ -234,41 +236,6 @@ export async function sendQuery(requestData: {
             query_text: requestData.content,
         }),
     });
-}
-
-
-// Function to post audio processing data
-export async function processAudio(requestData: {
-    user_id: string | null;
-    stream_id: string;
-    audio_name: string;
-    audio_file_blob_name: string;
-    category: string;
-    transcription_method?: string;
-}): Promise<any> {
-    const ROUTE = 'process/audio';
-    const URL = process.env.PROD_API_URL + ROUTE;
-
-      if (!URL) {
-        throw new Error('PROD_API_URL is not set');
-    }
-    
-    const response = await fetcher(URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            user_id: requestData.user_id,
-            stream_id: requestData.stream_id,
-            audio_name: requestData.audio_name,
-            audio_file_blob_name: requestData.audio_file_blob_name,
-            transcription_method: requestData.transcription_method || 'DG',
-            category: requestData.category,
-        }),
-      }
-    );
-    return response;
 }
 
 ///////////

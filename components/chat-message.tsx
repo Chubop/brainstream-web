@@ -10,7 +10,7 @@ import { MemoizedReactMarkdown } from '@/components/markdown'
 import { IconOpenAI, IconUser } from '@/components/ui/icons'
 import { ChatMessageActions } from '@/components/chat-message-actions'
 import { Message } from '@/lib/types'
-import { Skeleton } from './ui/skeleton'
+import { Skeleton } from './skeleton'
 
 export interface ChatMessageProps {
   message: Message
