@@ -3,18 +3,17 @@
 import * as React from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import { IconArrowElbow, IconPlus, IconUpload } from '@/components/ui/icons';
+import { Button } from '@/components/ui/button';
+import { IconArrowElbow } from '@/components/ui/icons';
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useEnterSubmit } from '@/lib/hooks/use-enter-submit';
-import { cn } from '@/lib/utils';
 import AudioUploadDialog from './audio-upload/upload-dialog';
 import { Dialog } from './ui/dialog';
-import { createSupabaseFrontendClient } from '@/app/auth/supabase';
+import AudioDropdown from './audio-upload/audio-dropdown';
 import { useUserId } from '@/lib/hooks/use-user-id';
 
 export interface PromptProps {
@@ -32,24 +31,9 @@ export function PromptForm({
 }: PromptProps) {
     const { formRef, onKeyDown } = useEnterSubmit();
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-    const [userId, setUserId] = React.useState<string | null>(null);
+    const userId = useUserId()
     const inputRef = React.useRef<HTMLTextAreaElement>(null);
-    const supabaseClient = createSupabaseFrontendClient();
 
-    React.useEffect(() => {
-        async function loadSession() {
-            try {
-                const { data } = await supabaseClient.auth.getSession();
-                if (data.session?.user?.id) {
-                    setUserId(data.session.user.id);
-                }
-            } catch (error) {
-                console.error('Error fetching session:', error);
-            }
-        }
-
-        loadSession();
-    }, [supabaseClient.auth]);
 
     React.useEffect(() => {
         if (inputRef.current) {
@@ -83,29 +67,7 @@ export function PromptForm({
                     </div>
                 )}
 
-                {userId && (
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setIsDialogOpen(true);
-                                }}
-                                className={cn(
-                                    buttonVariants({
-                                        size: 'sm',
-                                        variant: 'outline',
-                                    }),
-                                    'absolute left-0 top-4 h-8 w-8 rounded-full bg-background p-0 sm:left-4'
-                                )}
-                            >
-                                <IconUpload />
-                                <span className="sr-only">New Chat</span>
-                            </button>
-                        </TooltipTrigger>
-                        <TooltipContent>Upload an Audio File</TooltipContent>
-                    </Tooltip>
-                )}
+                {userId && <AudioDropdown setIsDialogOpen={setIsDialogOpen} />}
 
                 <Textarea
                     ref={inputRef}
@@ -114,8 +76,9 @@ export function PromptForm({
                     rows={1}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Send a message."
+                    placeholder={userId ? "Send a message." : "You must be logged in to send a message."}
                     spellCheck={false}
+                    disabled={userId ? false : true}
                     className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
                 />
                 <div className="absolute right-0 top-4 sm:right-4">
