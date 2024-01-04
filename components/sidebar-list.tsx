@@ -6,7 +6,7 @@ import { SidebarItem } from '@/components/sidebar-item';
 import { Stream } from '@/lib/types';
 import React from 'react';
 import { useEffect } from 'react';
-import { Skeleton } from './skeleton';
+import { Skeleton } from './ui/skeleton';
 import { useLocalStorage } from '@/lib/hooks/use-local-storage';
 
 export interface SidebarListProps {
