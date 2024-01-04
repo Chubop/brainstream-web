@@ -2,8 +2,10 @@ import { UseChatHelpers } from 'ai/react';
 
 import { Button } from '@/components/ui/button';
 import { ExternalLink } from '@/components/external-link';
-import { IconArrowRight } from '@/components/ui/icons';
+import { IconArrowRight, IconEdit, IconMicrophone, IconPlus, IconUpload } from '@/components/ui/icons';
 import { Timeline } from './timeline';
+import { Card } from './ui/card';
+import CardButton from './card-button';
 
 const exampleMessages = [
     {
@@ -20,22 +22,30 @@ const exampleMessages = [
     },
 ];
 
+
+
 export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
     return (
         <div className="mx-auto max-w-2xl px-4">
             <div className="rounded-lg border bg-background p-8">
-                <h1 className="mb-2 text-lg font-semibold">
+                <h1 className="mb-2 text-xl font-semibold">
                     <ExternalLink href="https://brainstream.app">
                         Brainstream
                     </ExternalLink>{' '}
-                    Console
                 </h1>
-                <div className="mb-2 leading-normal text-muted-foreground">
-                    View your recording history by clicking the top-left icon.
-                </div>
-                <div className="leading-normal text-muted-foreground">
-                    You can start a conversation here or try the following
-                    examples:
+                <div className='grid grid-cols-2 gap-4'>
+                    <CardButton title='New Recording' icon={<IconMicrophone />}>
+                        Create a new recording.
+                    </CardButton>
+                    <CardButton title='Start a Conversation' icon={<IconEdit />}>
+                        Start with a plain-text conversation.
+                    </CardButton>
+                    <CardButton title='Upload a Recording' icon={<IconUpload />}>
+                        Start with a plain-text conversation.
+                    </CardButton>
+                    <CardButton title='Something Else' icon={<IconUpload />}>
+                        Nobody knows!
+                    </CardButton>
                 </div>
                 <div className="mt-4 flex flex-col items-start space-y-2">
                     {exampleMessages.map((message, index) => (
