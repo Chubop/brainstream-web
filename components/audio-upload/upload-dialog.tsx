@@ -1,8 +1,14 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '../ui/dialog'
-import { Button } from '../ui/button'
+import React, { useEffect, useState } from 'react';
+import {
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+} from '../ui/dialog';
+import { Button } from '../ui/button';
 import AudioDropzone from './dropzone';
 import { Input } from '../ui/input';
 import CategorySelect from './category-select';
@@ -13,8 +19,9 @@ import { toast } from 'react-hot-toast';
 import { useUserId } from '@/lib/hooks/use-user-id';
 import { processAudio } from '@/app/actions';
 
+
 interface AudioUploadDialogProps {
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ setIsDialogOpen }) => {
@@ -26,19 +33,18 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ setIsDialogOpen }
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [category, setCategory] = useState('');
 
-  const MAX_FILE_SIZE_MB = 100;
-  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+    const MAX_FILE_SIZE_MB = 100;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
-  const { uploadFile } = useFileUpload();
-  const userId = useUserId();
+    const { uploadFile } = useFileUpload();
+    const userId = useUserId();
 
-
-  useEffect(() => {
-    if (files.length > 0) {
-      const nameWithoutExtension = files[0].name.replace(/\.[^/.]+$/, "");
-      setFileName(nameWithoutExtension);
-    }
-  }, [files]);
+    useEffect(() => {
+      if (files.length > 0) {
+        const nameWithoutExtension = files[0].name.replace(/\.[^/.]+$/, "");
+        setFileName(nameWithoutExtension);
+      }
+    }, [files]);
 
 
   const postAudioProcessingData = async (audioName: string) => {
@@ -86,9 +92,9 @@ const AudioUploadDialog: React.FC<AudioUploadDialogProps> = ({ setIsDialogOpen }
     setIsLoading(false);
   };
 
-  const closeUploadAlert = () => {
-    setShowUploadAlert(false);
-  }
+    const closeUploadAlert = () => {
+        setShowUploadAlert(false);
+    };
 
   return (
     <React.Fragment>
